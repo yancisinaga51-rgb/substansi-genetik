@@ -1,0 +1,2111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kuis HOTS Biologi Kelas XI - Substansi Genetik</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f1f5f9;
+    }
+    .seq-font {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e2e8f0;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+  </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+  <!-- TOP HEADER NAVBAR -->
+  <header class="bg-gradient-to-r from-emerald-800 via-teal-800 to-emerald-900 text-white shadow-lg sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-xl">
+          🧬
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-bold text-base sm:text-lg leading-tight">Evaluasi HOTS Biologi Kelas XI</h1>
+            <span class="hidden sm:inline-block text-[11px] font-semibold uppercase tracking-wider bg-emerald-500/30 border border-emerald-300/30 px-2 py-0.5 rounded-full">
+              50 Soal • 5 Opsi
+            </span>
+          </div>
+          <p class="text-xs text-emerald-200">Materi: Substansi Genetik (Kromosom, DNA, RNA, Replikasi &amp; Sintesis Protein)</p>
+        </div>
+      </div>
+
+      <!-- Mode Switcher -->
+      <div class="flex items-center gap-2 bg-slate-900/40 p-1 rounded-xl border border-white/10">
+        <button id="btnModeStudent" onclick="switchView('student')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-white text-emerald-900 shadow transition">
+          📝 Ruang Ujian Siswa
+        </button>
+        <button id="btnModeTeacher" onclick="switchView('teacher')" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-emerald-100 hover:bg-white/10 transition flex items-center gap-1.5">
+          <span>👨‍🏫 Akun Pembuat Soal</span>
+          <span id="badgeSubmissionCount" class="bg-amber-400 text-slate-900 text-[11px] font-bold px-1.5 py-0.2 rounded-full">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- BAR NAMA DAN KELAS (Always visible in Student View) -->
+    <div id="studentIdentityBar" class="bg-white text-slate-800 border-b border-slate-200 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3 flex-1">
+          <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-800 uppercase tracking-wide">
+            <span>👤 Identitas Peserta:</span>
+          </div>
+          <div class="flex-1 min-w-[200px] max-w-xs">
+            <input
+              type="text"
+              id="inputStudentName"
+              placeholder="Ketik Nama Lengkap Siswa..."
+              oninput="saveIdentity()"
+              class="w-full px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-slate-50 font-medium"
+            />
+          </div>
+          <div class="w-40 sm:w-48">
+            <select
+              id="inputStudentClass"
+              onchange="handleClassSelect(this.value)"
+              class="w-full px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-slate-50 font-medium"
+            >
+              <option value="">-- Pilih Kelas --</option>
+              <option value="XI IPA 1">XI IPA 1</option>
+              <option value="XI IPA 2">XI IPA 2</option>
+              <option value="XI IPA 3">XI IPA 3</option>
+              <option value="XI IPA 4">XI IPA 4</option>
+              <option value="XI IPA 5">XI IPA 5</option>
+              <option value="XI IPA 6">XI IPA 6</option>
+              <option value="XI-1 (Fase F)">XI-1 (Fase F)</option>
+              <option value="XI-2 (Fase F)">XI-2 (Fase F)</option>
+              <option value="XI-3 (Fase F)">XI-3 (Fase F)</option>
+              <option value="XI-4 (Fase F)">XI-4 (Fase F)</option>
+              <option value="CUSTOM">Kelas Lainnya (Ketik)...</option>
+            </select>
+          </div>
+          <div id="customClassWrapper" class="hidden w-36">
+            <input
+              type="text"
+              id="inputCustomClass"
+              placeholder="Contoh: XI MIPA 7"
+              oninput="saveIdentity()"
+              class="w-full px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 font-medium"
+            />
+          </div>
+          <div class="w-24">
+            <input
+              type="number"
+              id="inputStudentAbsen"
+              min="1"
+              max="60"
+              placeholder="No. Absen"
+              oninput="saveIdentity()"
+              class="w-full px-2.5 py-1.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-slate-50 font-medium"
+            />
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <span id="identityStatusBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+            ⚠️ Lengkapi Nama &amp; Kelas
+          </span>
+          <div class="hidden md:flex items-center gap-1.5 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700">
+            <span>⏱️ Waktu:</span>
+            <span id="timerDisplay" class="seq-font text-emerald-700 font-bold">90:00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6">
+
+    <!-- ==================== VIEW 1: STUDENT QUIZ INTERFACE ==================== -->
+    <div id="viewStudent">
+
+      <!-- Quiz Toolbar -->
+      <div id="quizControlsBar" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-5 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div>
+            <span class="text-xs text-slate-500 font-medium block">Progres Pengerjaan</span>
+            <div class="flex items-center gap-2 mt-0.5">
+              <span id="answeredCounter" class="text-base font-extrabold text-emerald-700">0 / 50</span>
+              <span class="text-xs text-slate-500">soal terjawab</span>
+            </div>
+          </div>
+          <div class="w-32 sm:w-48 bg-slate-200 rounded-full h-2.5 overflow-hidden">
+            <div id="progressBarFill" class="bg-emerald-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="toggleDisplayMode()" id="btnToggleDisplayMode" class="px-3 py-2 text-xs font-semibold rounded-xl border border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-700 transition">
+            📋 Tampilkan Semua 50 Soal
+          </button>
+          <button onclick="confirmSubmitQuiz()" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition flex items-center gap-1.5">
+            <span>📤 Kumpulkan ke Akun Guru</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Active Quiz Grid (Single Question Mode + Navigator) -->
+      <div id="activeQuizContainer" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left/Main Question Card -->
+        <div class="lg:col-span-8 space-y-4">
+          <div id="singleQuestionCard" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-7">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Navigation Buttons for Single Question Mode -->
+          <div id="singleNavButtons" class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <button onclick="prevQuestion()" id="btnPrev" class="px-4 py-2.5 rounded-xl text-sm font-semibold border border-slate-300 text-slate-700 hover:bg-slate-100 disabled:opacity-40 transition">
+              ← Sebelumnya
+            </button>
+            <button onclick="toggleFlagCurrent()" id="btnFlag" class="px-4 py-2.5 rounded-xl text-sm font-semibold border border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100 transition">
+              🚩 Tandai Ragu-ragu
+            </button>
+            <button onclick="nextQuestion()" id="btnNext" class="px-4 py-2.5 rounded-xl text-sm font-semibold bg-emerald-700 text-white hover:bg-emerald-800 transition">
+              Selanjutnya →
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Sidebar: 1-50 Navigator -->
+        <div id="navigatorSidebar" class="lg:col-span-4">
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sticky top-32">
+            <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+              <h3 class="font-bold text-sm text-slate-800">Navigasi Nomor Soal (1–50)</h3>
+              <span class="text-xs text-slate-500">Klik nomor</span>
+            </div>
+
+            <div id="questionGrid" class="grid grid-cols-10 sm:grid-cols-10 lg:grid-cols-5 xl:grid-cols-10 gap-1.5 max-h-[340px] overflow-y-auto pr-1">
+              <!-- Buttons 1-50 rendered by JS -->
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 grid grid-cols-3 gap-2 text-[11px] text-slate-600">
+              <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded bg-emerald-600 inline-block"></span> Dijawab
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded bg-amber-400 inline-block"></span> Ragu-ragu
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded bg-slate-100 border border-slate-300 inline-block"></span> Kosong
+              </div>
+            </div>
+
+            <button onclick="confirmSubmitQuiz()" class="w-full mt-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow transition">
+              ✅ Selesai &amp; Kirim Nilai
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Questions Mode Container (Hidden by default) -->
+      <div id="allQuestionsContainer" class="hidden space-y-5">
+        <!-- Rendered by JS when toggled -->
+      </div>
+
+      <!-- Result & Pembahasan View (Shown after submission) -->
+      <div id="resultContainer" class="hidden space-y-6">
+        <!-- Rendered by JS after submission -->
+      </div>
+
+    </div>
+
+    <!-- ==================== VIEW 2: TEACHER ACCOUNT / CREATOR DASHBOARD ==================== -->
+    <div id="viewTeacher" class="hidden">
+
+      <!-- Teacher Login Card -->
+      <div id="teacherLoginCard" class="max-w-md mx-auto bg-white rounded-2xl shadow-md border border-slate-200 p-6 sm:p-8 mt-6">
+        <div class="text-center mb-6">
+          <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3">
+            🔐
+          </div>
+          <h2 class="text-xl font-extrabold text-slate-800">Akun Pembuat Soal (Guru)</h2>
+          <p class="text-xs text-slate-500 mt-1">Masuk untuk melihat rekap nilai siswa, analisis butir soal, dan ekspor data ke Excel/CSV.</p>
+        </div>
+
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 mb-5 text-xs text-emerald-900">
+          <p class="font-bold">ℹ️ Info Akses Guru (Default):</p>
+          <p class="mt-0.5">ID Guru: <code class="font-mono font-bold bg-white px-1.5 py-0.5 rounded">guru</code> &nbsp;|&nbsp; PIN/Sandi: <code class="font-mono font-bold bg-white px-1.5 py-0.5 rounded">biologi11</code></p>
+        </div>
+
+        <form onsubmit="handleTeacherLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">ID Akun Pembuat Soal</label>
+            <input type="text" id="teacherUser" value="guru" required class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Kata Sandi / PIN Guru</label>
+            <input type="password" id="teacherPass" placeholder="Masukkan sandi (biologi11)" required class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+          </div>
+          <p id="teacherLoginError" class="hidden text-xs text-red-600 font-semibold">ID atau PIN salah. Gunakan ID: guru dan PIN: biologi11</p>
+          <button type="submit" class="w-full py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm rounded-xl shadow transition">
+            Masuk ke Dashboard Nilai
+          </button>
+        </form>
+      </div>
+
+      <!-- Teacher Dashboard Content (Shown after login) -->
+      <div id="teacherDashboard" class="hidden space-y-6">
+        <!-- Top Banner -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 text-xs font-bold bg-emerald-100 text-emerald-800 rounded-full">Akun Terverifikasi</span>
+              <h2 class="text-lg font-extrabold text-slate-800">Rekapitulasi Nilai Substansi Genetik — Kelas XI</h2>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">Semua hasil pengerjaan siswa otomatis terkumpul di akun ini dan dapat diunduh kapan saja.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="openWebhookModal()" class="px-3.5 py-2 text-xs font-bold rounded-xl border border-teal-300 bg-teal-50 text-teal-800 hover:bg-teal-100 transition">
+              ☁️ Sinkronisasi Google Sheets
+            </button>
+            <button onclick="exportResultsCSV()" class="px-3.5 py-2 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition">
+              📥 Unduh Nilai (.CSV / Excel)
+            </button>
+            <button onclick="logoutTeacher()" class="px-3.5 py-2 text-xs font-semibold rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-100 transition">
+              Keluar
+            </button>
+          </div>
+        </div>
+
+        <!-- Summary Stats -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <span class="text-xs font-semibold text-slate-500">Total Peserta Mengumpulkan</span>
+            <p id="statTotalStudents" class="text-2xl font-extrabold text-slate-800 mt-1">0 Siswa</p>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <span class="text-xs font-semibold text-slate-500">Rata-Rata Nilai Kelas</span>
+            <p id="statAvgScore" class="text-2xl font-extrabold text-emerald-700 mt-1">0.0</p>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <span class="text-xs font-semibold text-slate-500">Nilai Tertinggi</span>
+            <p id="statMaxScore" class="text-2xl font-extrabold text-blue-600 mt-1">0</p>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <span class="text-xs font-semibold text-slate-500">Nilai Terendah</span>
+            <p id="statMinScore" class="text-2xl font-extrabold text-amber-600 mt-1">0</p>
+          </div>
+        </div>
+
+        <!-- Filters & Table -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50">
+            <div class="flex flex-wrap items-center gap-2">
+              <input
+                type="text"
+                id="filterSearchName"
+                oninput="renderTeacherTable()"
+                placeholder="🔍 Cari nama siswa..."
+                class="px-3 py-1.5 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+              <select
+                id="filterClass"
+                onchange="renderTeacherTable()"
+                class="px-3 py-1.5 text-xs sm:text-sm border border-slate-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              >
+                <option value="ALL">Semua Kelas</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="seedDemoData()" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-slate-700">
+                + Simulasi Data Siswa
+              </button>
+              <button onclick="clearAllSubmissions()" class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-700">
+                🗑️ Kosongkan Rekap
+              </button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-100 text-slate-600 text-xs uppercase tracking-wider border-b border-slate-200">
+                  <th class="py-3 px-4 font-bold">No</th>
+                  <th class="py-3 px-4 font-bold">Nama Lengkap Siswa</th>
+                  <th class="py-3 px-4 font-bold">Kelas</th>
+                  <th class="py-3 px-4 font-bold">Absen</th>
+                  <th class="py-3 px-4 font-bold text-center">Benar / 50</th>
+                  <th class="py-3 px-4 font-bold text-center">Nilai Akhir</th>
+                  <th class="py-3 px-4 font-bold">Waktu Pengumpulan</th>
+                  <th class="py-3 px-4 font-bold text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="teacherTableBody" class="divide-y divide-slate-200 text-sm">
+                <!-- Rows rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Kunci Jawaban & Analisis Soal Section for Teacher -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-bold text-base text-slate-800">📚 Bank 50 Soal &amp; Kunci Jawaban Guru</h3>
+              <p class="text-xs text-slate-500">Lihat daftar lengkap 50 soal HOTS beserta kunci jawaban dan pembahasannya.</p>
+            </div>
+            <button onclick="toggleTeacherAnswerKey()" id="btnToggleKey" class="px-4 py-2 text-xs font-bold rounded-xl bg-slate-800 text-white hover:bg-slate-700 transition">
+              Buka Kunci Jawaban &amp; Pembahasan
+            </button>
+          </div>
+          <div id="teacherAnswerKeyContainer" class="hidden mt-5 pt-5 border-t border-slate-200 space-y-4 max-h-[600px] overflow-y-auto pr-2">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODAL: GOOGLE SHEETS WEBHOOK SETUP -->
+  <div id="webhookModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-extrabold text-base text-slate-800">☁️ Pengumpulan Nilai Online (Google Sheets)</h3>
+        <button onclick="closeWebhookModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      </div>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Secara bawaan, nilai siswa langsung tersimpan di perangkat/browser ini pada tab <strong>Akun Pembuat Soal</strong>. Jika file HTML ini dibagikan ke HP/laptop masing-masing siswa dan Anda ingin nilai otomatis masuk ke Google Spreadsheet Anda, tempelkan URL <em>Google Apps Script Web App</em> di bawah ini:
+      </p>
+      <div>
+        <label class="block text-xs font-bold text-slate-700 mb-1">URL Web App Google Apps Script</label>
+        <input type="url" id="inputWebhookUrl" placeholder="https://script.google.com/macros/s/..." class="w-full px-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
+      </div>
+      <details class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs">
+        <summary class="font-bold text-slate-700 cursor-pointer">Lihat Kode Google Apps Script (Klik untuk menyalin)</summary>
+        <pre class="mt-2 p-2 bg-slate-900 text-emerald-300 rounded-lg overflow-x-auto text-[11px] seq-font">function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  sheet.appendRow([new Date(), data.nama, data.kelas, data.absen, data.benar, data.skor]);
+  return ContentService.createTextOutput("OK");
+}</pre>
+      </details>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeWebhookModal()" class="px-4 py-2 text-xs font-semibold rounded-xl border border-slate-300 text-slate-600">Batal</button>
+        <button onclick="saveWebhookUrl()" class="px-4 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white hover:bg-emerald-700">Simpan Pengaturan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DETAIL JAWABAN SISWA (FOR TEACHER) -->
+  <div id="studentDetailModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-200">
+      <div class="p-4 border-b border-slate-200 flex items-center justify-between">
+        <div>
+          <h3 id="detailModalTitle" class="font-extrabold text-base text-slate-800">Detail Hasil Siswa</h3>
+          <p id="detailModalSubtitle" class="text-xs text-slate-500"></p>
+        </div>
+        <button onclick="closeDetailModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg px-2">✕</button>
+      </div>
+      <div id="detailModalBody" class="p-4 overflow-y-auto space-y-3 text-xs">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 py-4 mt-10 text-center text-xs text-slate-500">
+    Evaluasi Pembelajaran Biologi SMA Kelas XI • Materi Substansi Genetik (HOTS 50 Soal)
+  </footer>
+
+  <!-- ==================== JAVASCRIPT: 50 HOTS QUESTIONS & APP LOGIC ==================== -->
+  <script>
+    const QUESTIONS = [
+      // ==================== BAGIAN 1: KROMOSOM, GEN, DAN ALEL (1 - 10) ====================
+      {
+        id: 1,
+        topic: "Kromosom & Kromatin",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Pada sel eukariotik, DNA yang panjangnya sekitar 2 meter dapat dikemas ke dalam nukleus berdiameter 6 mikrometer melalui pelipatan bertingkat dengan bantuan protein histon. Jika suatu enzim histon deasetilase (HDAC) bekerja secara hiperaktif pada segmen kromatin tertentu, dampak molekuler yang paling tepat terjadi pada segmen tersebut adalah ....",
+        options: [
+          "Muatan positif histon meningkat sehingga ikatan dengan gugus fosfat DNA menguat dan transkripsi terhambat",
+          "Muatan negatif histon meningkat sehingga DNA terlepas dari nukleosom dan laju replikasi meningkat drastis",
+          "Histon H1 terdegradasi sehingga struktur solenoid 30 nm berubah menjadi eukromatin yang aktif ditranskripsi",
+          "Ikatan hidrogen antarbasa nitrogen terputus sehingga RNA polimerase mudah menempel pada daerah promoter",
+          "Telomer mengalami pemanjangan akibat hilangnya gugus asetil pada ujung ekor protein histon oktamer"
+        ],
+        answer: 0,
+        explanation: "Penghilangan gugus asetil (deasetilasi) oleh HDAC mengembalikan muatan positif pada residu lisin protein histon. Hal ini memperkuat tarikan elektrostatik dengan gugus fosfat DNA yang bermuatan negatif, membentuk heterokromatin yang padat sehingga RNA polimerase sulit mengakses DNA untuk transkripsi."
+      },
+      {
+        id: 2,
+        topic: "Struktur Kromosom",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Seorang peneliti mengamati empat kromosom manusia (P, Q, R, dan S) pada tahap metafase mitosis dan mengukur rasio panjang lengan panjang (q) terhadap lengan pendek (p) sebagai berikut:<br><div class='my-2 p-2.5 bg-slate-50 border border-slate-200 rounded-lg seq-font text-xs'>• Kromosom P: rasio q/p = 1,05<br>• Kromosom Q: rasio q/p = 2,40<br>• Kromosom R: rasio q/p = 6,80<br>• Kromosom S: lengan p tidak teramati (sentromer di ujung terminal)</div>Berdasarkan data morfometri tersebut, bentuk kromosom Q dan pergerakannya saat ditarik benang spindel pada fase anafase adalah ....",
+        options: [
+          "Metasentrik; membentuk huruf V dengan kedua lengan sama panjang",
+          "Submetasentrik; membentuk huruf L atau J dengan salah satu lengan lebih panjang",
+          "Akrosentrik; membentuk huruf I lurus karena hanya memiliki satu lengan fungsional",
+          "Telosentrik; membentuk huruf J karena sentromer terletak tepat di tengah kromatid",
+          "Submetasentrik; membentuk huruf V simetris akibat pembelahan sentromer secara longitudinal"
+        ],
+        answer: 1,
+        explanation: "Rasio q/p = 1,05 mendekati 1 (metasentrik, bentuk V); rasio q/p = 2,40 menunjukkan sentromer agak bergeser dari tengah (submetasentrik, membentuk huruf L atau J saat anafase); rasio q/p = 6,80 adalah akrosentrik; dan sentromer di ujung adalah telosentrik."
+      },
+      {
+        id: 3,
+        topic: "Kariotipe & Genom",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Analisis kariotipe dilakukan terhadap dua sampel sel dari seorang individu laki-laki normal: Sampel X diambil dari sel epitel mukosa pipi, sedangkan Sampel Y diambil dari sel spermatosit sekunder yang telah menyelesaikan meiosis I. Perbandingan formula kromosom yang benar antara Sampel X dan Sampel Y adalah ....",
+        options: [
+          "Sampel X memiliki 44A + XY (46 molekul DNA), sedangkan Sampel Y memiliki 22A + X atau 22A + Y (23 kromosom berkromatid ganda)",
+          "Sampel X memiliki 22AA + XY (46 kromosom), sedangkan Sampel Y memiliki 22A + XY (24 kromosom tunggal)",
+          "Sampel X memiliki 44A + XX (46 kromosom), sedangkan Sampel Y memiliki 22A + X (23 kromosom berkromatid tunggal)",
+          "Sampel X memiliki 46A + XY (48 kromosom), sedangkan Sampel Y memiliki 23A + Y (24 kromosom berkromatid ganda)",
+          "Sampel X memiliki 44A + XY (92 kromatid), sedangkan Sampel Y memiliki 44A + X (45 kromatid tunggal)"
+        ],
+        answer: 0,
+        explanation: "Sel epitel pipi adalah sel somatik diploid (2n = 46 = 44A + XY). Spermatosit sekunder merupakan hasil meiosis I (pembelahan reduksi) sehingga bersifat haploid (n = 23, yaitu 22A + X atau 22A + Y), namun setiap kromosomnya masih terdiri atas dua kromatid saudara (berkromatid ganda)."
+      },
+      {
+        id: 4,
+        topic: "Telomer & Enzim Telomerase",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Sebagian besar sel somatik dewasa manusia mengalami batas pembelahan sel (batas Hayflick) karena ujung kromosomnya (telomer) memendek setiap kali pembelahan. Namun, sel punca embrionik dan sel kanker mampu membelah terus-menerus tanpa penuaan replikatif. Evaluasi mekanisme molekuler yang menjelaskan fenomena pada sel kanker tersebut adalah ....",
+        options: [
+          "Sel kanker mengaktifkan kembali enzim telomerase yang membawa cetakan RNA internal untuk memperpanjang sekuens berulang TTAGGG",
+          "Sel kanker menonaktifkan enzim DNA helikase sehingga ujung 5' kromosom tidak pernah mengalami pemotongan primer RNA",
+          "Sel kanker mengubah struktur kromosom linear menjadi kromosom sirkular seperti pada bakteri sehingga tidak memiliki ujung bebas",
+          "Sel kanker meningkatkan aktivitas enzim eksonuklease 3' ke 5' untuk menggandakan sentromer sebelum sitokinesis terjadi",
+          "Sel kanker menghilangkan seluruh daerah intron sehingga panjang kromosom tetap konstan meskipun telomer terdegradasi"
+        ],
+        answer: 0,
+        explanation: "Telomerase adalah ribonukleoprotein (reverse transcriptase) yang membawa template RNA internal untuk menambahkan sekuens berulang kaya-G (5'-TTAGGG-3' pada manusia) di ujung 3' telomer, sehingga mencegah pemendekan kromosom pada sel punca dan sel kanker."
+      },
+      {
+        id: 5,
+        topic: "Gen & Alel",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Pada tanaman ercis, lokus gen pengatur warna bunga terletak pada kromosom nomor 1. Individu heterozigot memiliki alel dominan P (menghasilkan enzim fungsional untuk pigmen antosianin ungu) dan alel resesif p (tidak menghasilkan enzim fungsional). Pernyataan yang paling tepat mengenai hubungan fisik dan fungsional antara alel P dan alel p pada sel meristem akar tanaman tersebut saat fase G2 adalah ....",
+        options: [
+          "Alel P dan p berada pada lokus yang sama dari pasangan kromosom homolog, dan masing-masing telah bereplikasi menjadi dua kromatid saudara identik",
+          "Alel P dan p berada pada dua kromatid saudara dalam satu kromosom yang sama akibat peristiwa pindah silang selama mitosis",
+          "Alel P terletak pada kromosom autosom sedangkan alel p terletak pada kromosom gonosom sehingga keduanya tidak pernah berpasangan",
+          "Alel P hanya terdapat di dalam nukleus sel kelopak bunga, sedangkan di sel akar hanya terdapat alel p yang tidak aktif",
+          "Alel P dan p memiliki panjang basa nitrogen yang selalu sama persis, tetapi berbeda jenis gula pentosa penyusunnya"
+        ],
+        answer: 0,
+        explanation: "Alel adalah variasi alternatif dari gen yang menempati lokus bersesuaian pada pasangan kromosom homolog. Pada fase G2 (setelah fase S), setiap kromosom homolog telah bereplikasi sehingga masing-masing terdiri atas dua kromatid saudara yang membawa alel identik (PP pada satu homolog, pp pada homolog pasangannya)."
+      },
+      {
+        id: 6,
+        topic: "Eukromatin & Heterokromatin",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Pada mamalia betina (XX), salah satu kromosom X mengalami inaktivasi secara acak pada awal perkembangan embrio membentuk badan Barr (Barr body). Jika sebuah gen yang sebelumnya berada di daerah eukromatin mengalami translokasi ke dekat wilayah badan Barr tersebut, kemungkinan perubahan fenotipe molekuler yang terjadi pada gen yang berpindah adalah ....",
+        options: [
+          "Gen tersebut cenderung mengalami kondensasi menjadi heterokromatin fakultatif sehingga ekspresinya terbungkam (gene silencing)",
+          "Gen tersebut mengalami amplifikasi ganda sehingga laju sintesis mRNA meningkat dua kali lipat dibandingkan alel normalnya",
+          "Urutan kodon pada gen tersebut berubah dari kode triplet menjadi kode duplet akibat tekanan mekanis badan Barr",
+          "Gen tersebut berpindah ke sitoplasma dan ditranslasikan langsung oleh ribosom tanpa melalui tahap transkripsi",
+          "Gen tersebut kehilangan seluruh ikatan fosfodiester dan berubah menjadi rantai RNA utas tunggal yang stabil"
+        ],
+        answer: 0,
+        explanation: "Fenomena ini dikenal sebagai position-effect variegation (PEV). Ketika gen eukromatik dipindahkan mendekati daerah heterokromatin (seperti badan Barr), pengemasan kromatin padat dapat menyebar dan membungkam ekspresi gen tersebut."
+      },
+      {
+        id: 7,
+        topic: "Dinamika Kromosom & DNA",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Suatu organisme diploid memiliki jumlah kromosom 2n = 16. Seorang siswa membandingkan jumlah kromosom dan jumlah total molekul DNA (kromatid) dalam satu inti sel pada tahap G1, G2, dan telofase mitosis. Data kuantitatif yang paling akurat untuk satu inti sel organisme tersebut adalah ....",
+        options: [
+          "G1: 16 kromosom, 16 molekul DNA; G2: 16 kromosom, 32 molekul DNA; Telofase (tiap inti anak): 16 kromosom, 16 molekul DNA",
+          "G1: 16 kromosom, 32 molekul DNA; G2: 32 kromosom, 32 molekul DNA; Telofase (tiap inti anak): 16 kromosom, 16 molekul DNA",
+          "G1: 8 kromosom, 16 molekul DNA; G2: 16 kromosom, 32 molekul DNA; Telofase (tiap inti anak): 8 kromosom, 8 molekul DNA",
+          "G1: 16 kromosom, 16 molekul DNA; G2: 32 kromosom, 64 molekul DNA; Telofase (tiap inti anak): 16 kromosom, 32 molekul DNA",
+          "G1: 16 kromosom, 8 molekul DNA; G2: 16 kromosom, 16 molekul DNA; Telofase (tiap inti anak): 8 kromosom, 16 molekul DNA"
+        ],
+        answer: 0,
+        explanation: "Pada G1 terdapat 16 kromosom berkromatid tunggal (16 molekul DNA). Setelah fase S menuju G2, jumlah DNA berlipat ganda menjadi 32 kromatid, namun tetap terhitung 16 kromosom karena sentromer belum membelah. Pada telofase, kromatid saudara memisah sehingga tiap inti anak kembali memiliki 16 kromosom (16 molekul DNA)."
+      },
+      {
+        id: 8,
+        topic: "Sejarah Penemuan DNA",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Dalam eksperimen klasik Avery, MacLeod, dan McCarty (1944), ekstrak bakteri <em>Streptococcus pneumoniae</em> galur S yang telah dimatikan dengan panas dibagi ke dalam empat tabung perlakuan sebelum dicampurkan dengan bakteri hidup galur R yang tidak virulen:<br><div class='my-2 p-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs'>• Tabung 1: Ditambahkan enzim protease<br>• Tabung 2: Ditambahkan enzim ribonuklease (RNase)<br>• Tabung 3: Ditambahkan enzim deoksiribonuklease (DNase)<br>• Tabung 4: Tanpa penambahan enzim (kontrol)</div>Ketika keempat campuran tersebut disuntikkan ke mencit secara terpisah, hasil pengamatan yang membuktikan bahwa DNA adalah prinsip transformasi adalah ....",
+        options: [
+          "Mencit pada Tabung 1, 2, dan 4 mati serta ditemukan bakteri galur S hidup, sedangkan mencit pada Tabung 3 tetap hidup",
+          "Mencit pada Tabung 3 dan 4 mati karena DNase mengaktifkan kapsul polisakarida bakteri galur R secara langsung",
+          "Mencit pada Tabung 1 dan 2 tetap hidup karena protein dan RNA merupakan pembawa sifat virulensi bakteri",
+          "Mencit pada seluruh tabung mati karena pemanasan gagal merusak materi genetik bakteri galur S",
+          "Mencit pada Tabung 3 mati paling cepat karena fragmen DNA hasil pemotongan DNase lebih mudah masuk ke sel galur R"
+        ],
+        answer: 0,
+        explanation: "Protease (menghancurkan protein) dan RNase (menghancurkan RNA) tidak mencegah transformasi galur R menjadi galur S virulen, sehingga mencit tetap mati. Hanya DNase yang menghancurkan DNA dan menggagalkan transformasi, sehingga mencit di Tabung 3 tetap hidup."
+      },
+      {
+        id: 9,
+        topic: "Eksperimen Hershey-Chase",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Alfred Hershey dan Martha Chase menumbuhkan dua kelompok bakteriofag T2: Kelompok A diberi label radioaktif <sup>35</sup>S dan Kelompok B diberi label radioaktif <sup>32</sup>P. Setelah fag menginfeksi bakteri <em>E. coli</em>, campuran diaduk dengan blender untuk melepaskan selubung fag dari permukaan bakteri, lalu disentrifugasi hingga terbentuk pelet (endapan sel bakteri) dan supernatan (cairan luar sel). Hasil distribusi radioaktivitas yang terukur adalah ....",
+        options: [
+          "Kelompok A: radioaktivitas tinggi di supernatan; Kelompok B: radioaktivitas tinggi di pelet sel bakteri",
+          "Kelompok A: radioaktivitas tinggi di pelet sel bakteri; Kelompok B: radioaktivitas tinggi di supernatan",
+          "Kelompok A dan Kelompok B sama-sama menunjukkan radioaktivitas tinggi di dalam supernatan",
+          "Kelompok A dan Kelompok B sama-sama menunjukkan radioaktivitas tinggi di dalam pelet bakteri",
+          "Kelompok A tidak menunjukkan radioaktivitas karena <sup>35</sup>S menguap saat proses sentrifugasi"
+        ],
+        answer: 0,
+        explanation: "Belerang (35S) hanya terdapat pada protein kapsid fag yang tertinggal di luar sel bakteri sehingga berada di supernatan setelah sentrifugasi. Fosfor (32P) terdapat pada DNA fag yang diinjeksikan ke dalam sel bakteri sehingga terdeteksi di pelet."
+      },
+      {
+        id: 10,
+        topic: "Organisasi Genom",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Data genomik menunjukkan bahwa panjang total DNA haploid manusia sekitar 3,2 × 10<sup>9</sup> pasang basa (pb), sedangkan spesies amfibi <em>Ambystoma mexicanum</em> (axolotl) memiliki genom sepanjang 3,2 × 10<sup>10</sup> pb (10 kali lebih besar dari manusia), meskipun jumlah gen penyandi proteinnya hampir sama (sekitar 20.000–23.000 gen). Penjelasan ilmiah yang paling tepat untuk fenomena ini adalah ....",
+        options: [
+          "Genom axolotl mengandung proporsi sekuens DNA non-penyandi (intron, transposon, dan DNA berulang) yang jauh lebih besar dibandingkan manusia",
+          "Setiap asam amino pada axolotl disandi oleh 30 basa nitrogen, sedangkan pada manusia hanya disandi oleh 3 basa nitrogen",
+          "Sel somatik axolotl bersifat dekaploid (10n) sehingga setiap gen memiliki sepuluh salinan identik dalam satu genom haploid",
+          "Axolotl tidak memiliki mekanisme splicing RNA sehingga seluruh intron tetap dipertahankan di dalam rantai polipeptida",
+          "Kromosom axolotl tersusun atas rantai DNA rangkap empat (tetrapleks) untuk melindungi materi genetik di habitat akuatik"
+        ],
+        answer: 0,
+        explanation: "Fenomena C-value paradox menunjukkan bahwa ukuran genom tidak berkorelasi lurus dengan kompleksitas organisme karena sebagian besar ukuran genom eukariotik besar berasal dari akumulasi DNA non-coding, intron panjang, dan elemen transposable (retrotransposon)."
+      },
+
+      // ==================== BAGIAN 2: STRUKTUR KIMIA DNA & RNA (11 - 20) ====================
+      {
+        id: 11,
+        topic: "Struktur Nukleotida",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Perhatikan struktur molekul penyusun rantai polinukleotida DNA. Jika sebuah enzim spesifik memutus seluruh ikatan ester yang menghubungkan atom karbon nomor 3' gula deoksiribosa dengan gugus fosfat dari nukleotida berikutnya, namun membiarkan ikatan glikosidik dan ikatan hidrogen tetap utuh, akibat struktural yang langsung terjadi adalah ....",
+        options: [
+          "Tulang punggung gula-fosfat pada setiap untai terputus menjadi monomer nukleotida bebas, tetapi dua untai tetap berdekatan sementara melalui pasangan basa",
+          "Basa nitrogen purin dan pirimidin terlepas dari gula deoksiribosa sehingga terbentuk rantai gula-fosfat kosong tanpa informasi genetik",
+          "Kedua untai heliks ganda DNA langsung terpisah menjadi dua utas tunggal yang masing-masing masih utuh sepanjang rantai",
+          "Gugus hidroksil pada karbon nomor 2' teroksidasi sehingga molekul DNA berubah secara spontan menjadi molekul mRNA",
+          "Pasangan basa adenin dan timin berubah menjadi pasangan basa guanin dan sitosin akibat hilangnya tegangan pilinan"
+        ],
+        answer: 0,
+        explanation: "Ikatan antara karbon 3' gula pentosa dan gugus fosfat nukleotida berikutnya adalah ikatan fosfodiester yang membentuk tulang punggung (backbone) gula-fosfat. Pemutusan ikatan ini memecah rantai menjadi nukleotida-nukleotida bebas, sementara ikatan glikosidik (gula-basa) dan ikatan hidrogen (antarbasa) belum diputus."
+      },
+      {
+        id: 12,
+        topic: "Aturan Chargaff & Ikatan Hidrogen",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Suatu fragmen DNA utas ganda linear memiliki panjang 500 pasang basa (bp). Hasil analisis kimia menunjukkan bahwa persentase basa Timin (T) pada fragmen DNA tersebut adalah 18% dari total seluruh basa nitrogen. Berapakah jumlah basa Sitosin (C) dan total ikatan hidrogen yang menghubungkan kedua untai DNA pada fragmen tersebut?",
+        options: [
+          "320 basa Sitosin dan 1.320 ikatan hidrogen",
+          "180 basa Sitosin dan 1.180 ikatan hidrogen",
+          "320 basa Sitosin dan 1.180 ikatan hidrogen",
+          "160 basa Sitosin dan 1.320 ikatan hidrogen",
+          "640 basa Sitosin dan 1.500 ikatan hidrogen"
+        ],
+        answer: 0,
+        explanation: "Total basa = 500 bp × 2 = 1.000 basa. Jika T = 18% (180 basa), maka A = 18% (180 basa), sehingga terdapat 180 pasangan A=T. Sisa basa = 100% - 36% = 64%, terbagi rata untuk G = 32% (320 basa) dan C = 32% (320 basa), membentuk 320 pasangan G≡C. Total ikatan hidrogen = (180 × 2) + (320 × 3) = 360 + 960 = 1.320 ikatan hidrogen."
+      },
+      {
+        id: 13,
+        topic: "Analisis Komposisi Basa",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Seorang ahli virologi mengisolasi asam nukleat dari tiga jenis virus baru (Virus X, Virus Y, dan Virus Z) dan menentukan persentase komposisi basa nitrogennya seperti pada tabel berikut:<br><div class='my-2 overflow-x-auto'><table class='w-full text-xs border border-slate-300 seq-font'><tr class='bg-slate-100'><th class='border p-1.5'>Sampel</th><th class='border p-1.5'>%A</th><th class='border p-1.5'>%T</th><th class='border p-1.5'>%U</th><th class='border p-1.5'>%G</th><th class='border p-1.5'>%C</th></tr><tr><td class='border p-1.5 font-bold'>Virus X</td><td class='border p-1.5'>24,0</td><td class='border p-1.5'>24,1</td><td class='border p-1.5'>0</td><td class='border p-1.5'>26,0</td><td class='border p-1.5'>25,9</td></tr><tr><td class='border p-1.5 font-bold'>Virus Y</td><td class='border p-1.5'>31,5</td><td class='border p-1.5'>19,2</td><td class='border p-1.5'>0</td><td class='border p-1.5'>28,0</td><td class='border p-1.5'>21,3</td></tr><tr><td class='border p-1.5 font-bold'>Virus Z</td><td class='border p-1.5'>22,4</td><td class='border p-1.5'>0</td><td class='border p-1.5'>22,5</td><td class='border p-1.5'>27,6</td><td class='border p-1.5'>27,5</td></tr></table></div>Kesimpulan yang paling tepat mengenai jenis materi genetik ketiga virus tersebut adalah ....",
+        options: [
+          "Virus X memiliki DNA utas ganda, Virus Y memiliki DNA utas tunggal, dan Virus Z memiliki RNA utas ganda",
+          "Virus X memiliki DNA utas tunggal, Virus Y memiliki DNA utas ganda, dan Virus Z memiliki mRNA utas tunggal",
+          "Virus X dan Virus Y memiliki DNA utas ganda, sedangkan Virus Z memiliki hibrid DNA-RNA",
+          "Virus X memiliki RNA utas ganda, Virus Y memiliki DNA utas ganda, dan Virus Z memiliki RNA utas tunggal",
+          "Virus X memiliki DNA utas ganda, Virus Y memiliki RNA utas tunggal, dan Virus Z memiliki DNA utas tunggal"
+        ],
+        answer: 0,
+        explanation: "Virus X mengandung Timin (DNA) dan memenuhi aturan Chargaff (%A ≈ %T dan %G ≈ %C), sehingga berupa DNA utas ganda (dsDNA). Virus Y mengandung Timin tetapi %A ≠ %T dan %G ≠ %C, sehingga berupa DNA utas tunggal (ssDNA). Virus Z mengandung Urasil (RNA) dan memiliki rasio %A ≈ %U serta %G ≈ %C, menunjukkan RNA utas ganda (dsRNA)."
+      },
+      {
+        id: 14,
+        topic: "Polaritas & Antiparalel DNA",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Struktur heliks ganda DNA bersifat antiparalel. Apabila suatu segmen untai pertama DNA memiliki urutan nukleotida <code>5'-A-G-C-T-A-C-G-3'</code>, pernyataan yang paling tepat mengenai struktur kimia ujung-ujung untai komplementernya adalah ....",
+        options: [
+          "Untai komplementer dimulai dari ujung 3' dengan gugus hidroksil (-OH) bebas pada basa T dan berakhir di ujung 5' dengan gugus fosfat bebas pada basa C",
+          "Untai komplementer dimulai dari ujung 5' dengan gugus fosfat bebas pada basa T dan berakhir di ujung 3' dengan gugus -OH pada basa C",
+          "Untai komplementer memiliki urutan 5'-T-C-G-A-T-G-C-3' karena kedua untai bergerak searah dari atas ke bawah",
+          "Ujung 3' untai komplementer berikatan kovalen langsung dengan ujung 5' untai pertama membentuk ikatan fosfodiester",
+          "Untai komplementer mengandung basa Urasil sebagai pasangan Adenin dengan gugus -OH pada atom karbon nomor 2'"
+        ],
+        answer: 0,
+        explanation: "Untai komplementer berpasangan secara antiparalel: ujung 5' untai pertama (basa A) berpasangan dengan ujung 3' untai kedua (basa T yang memiliki gugus -OH bebas pada C-3'), dan berakhir pada ujung 5' untai kedua (basa C yang memiliki gugus fosfat bebas pada C-5')."
+      },
+      {
+        id: 15,
+        topic: "Stabilitas Termal DNA",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Suhu leleh DNA (<em>melting temperature</em> / T<sub>m</sub>) adalah suhu di mana 50% heliks ganda DNA terdenaturasi menjadi utas tunggal. Seorang peneliti memanaskan empat sampel DNA dengan panjang sama (1.000 bp) dari spesies bakteri yang berbeda. Sampel DNA yang akan memiliki nilai T<sub>m</sub> paling tinggi adalah sampel yang berasal dari ....",
+        options: [
+          "Bakteri hipertermofil <em>Thermus aquaticus</em> dengan kandungan basa Guanin sebesar 34%",
+          "Bakteri usus <em>Escherichia coli</em> dengan kandungan basa Adenin sebesar 25%",
+          "Bakteri tanah <em>Bacillus subtilis</em> dengan kandungan basa Timin sebesar 28%",
+          "Bakteri patogen <em>Staphylococcus aureus</em> dengan kandungan basa Adenin sebesar 33%",
+          "Bakteri laut dalam dengan persentase pasangan basa A-T sebesar 62%"
+        ],
+        answer: 0,
+        explanation: "Pasangan basa G≡C dihubungkan oleh 3 ikatan hidrogen, sedangkan A=T hanya 2 ikatan hidrogen. Semakin tinggi kandungan G+C, semakin tinggi energi panas (Tm) yang diperlukan untuk memisahkan kedua untai. Jika G = 34%, maka C = 34%, sehingga total G+C = 68% (tertinggi di antara semua opsi)."
+      },
+      {
+        id: 16,
+        topic: "Perbedaan Kimia DNA & RNA",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Di dalam sel, molekul DNA berfungsi sebagai penyimpan informasi genetik jangka panjang yang sangat stabil, sedangkan mRNA berumur pendek dan cepat terdegradasi setelah ditranslasikan. Alasan struktur kimia yang menyebabkan RNA jauh lebih rentan mengalami hidrolisis spontan dalam kondisi basa dibandingkan DNA adalah ....",
+        options: [
+          "Keberadaan gugus hidroksil (-OH) pada atom karbon nomor 2' gula ribosa RNA yang dapat menyerang ikatan fosfodiester di sebelahnya",
+          "Keberadaan basa Urasil yang tidak memiliki gugus metil pada cincin pirimidin sehingga ikatan glikosidiknya mudah putus",
+          "RNA tidak memiliki gugus fosfat bermuatan negatif sehingga tidak mampu menolak serangan ion hidroksida dari pelarut air",
+          "Gula ribosa pada RNA memiliki enam atom karbon (heksosa) yang membentuk cincin bertegangan tinggi di dalam sitoplasma",
+          "Ikatan fosfodiester pada RNA menghubungkan atom karbon 2' dengan atom karbon 5', bukan 3' dengan 5' seperti pada DNA"
+        ],
+        answer: 0,
+        explanation: "Gugus 2'-OH pada gula ribosa RNA bertindak sebagai nukleofil internal yang dapat memutus ikatan fosfodiester di dekatnya melalui hidrolisis basa. DNA tidak memiliki gugus 2'-OH (2'-deoksiribosa), sehingga tulang punggungnya jauh lebih stabil."
+      },
+      {
+        id: 17,
+        topic: "Jenis & Fungsi RNA",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Ribosom tidak hanya berfungsi sebagai tempat melekatnya mRNA dan tRNA, tetapi juga berperan sebagai katalisator pembentukan ikatan peptida antarasam amino. Komponen ribosom yang secara langsung menjalankan aktivitas katalitik (peptidil transferase) tersebut adalah ....",
+        options: [
+          "Molekul rRNA pada ribosom subunit besar yang bertindak sebagai ribozim",
+          "Protein struktural pada ribosom subunit kecil yang mengikat kodon start AUG",
+          "Lengan D pada molekul tRNA yang mengenali enzim aminoasil-tRNA sintetase",
+          "Ujung 5' cap pada mRNA yang berinteraksi dengan faktor inisiasi translasi",
+          "Enzim RNA polimerase II yang tetap menempel pada mRNA saat keluar dari nukleus"
+        ],
+        answer: 0,
+        explanation: "Pembentukan ikatan peptida di situs P-A ribosom dikatalisis langsung oleh rRNA subunit besar (23S rRNA pada prokariotik / 28S rRNA pada eukariotik), sehingga ribosom secara fungsional adalah sebuah ribozim (enzim berbasis RNA)."
+      },
+      {
+        id: 18,
+        topic: "Arah Polimerisasi Asam Nukleat",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Baik replikasi DNA maupun transkripsi RNA selalu mensintesis rantai polinukleotida baru dengan arah dari ujung 5' ke ujung 3'. Alasan bioenergetika yang menjelaskan mengapa penambahan nukleotida baru hanya terjadi pada ujung 3'-OH dan bukan pada ujung 5'-fosfat adalah ....",
+        options: [
+          "Pemutusan ikatan pirofosfat dari nukleosida trifosfat (dNTP/NTP) yang masuk menyediakan energi bebas untuk membentuk ikatan fosfodiester dengan ujung 3'-OH",
+          "Ujung 5' rantai yang sedang tumbuh tidak memiliki atom oksigen sehingga tidak dapat membentuk ikatan kovalen dengan basa nitrogen",
+          "Enzim polimerase hanya dapat bergerak dari kutub utara ke kutub selatan nukleus mengikuti gradien medan listrik kromatin",
+          "Penambahan nukleotida pada ujung 5' akan mengubah konformasi heliks DNA dari bentuk B menjadi bentuk Z yang tidak dapat dibaca ribosom",
+          "Gugus 3'-OH bermuatan positif kuat sehingga menarik nukleosida monofosfat yang bermuatan negatif secara spontan tanpa enzim"
+        ],
+        answer: 0,
+        explanation: "Nukleotida yang masuk membawa tiga gugus fosfat (dNTP/NTP) pada ujung 5'-nya. Pemutusan dua fosfat terminal (pirofosfat) memberikan energi untuk menghubungkan fosfat alfa ke ujung 3'-OH rantai yang tumbuh. Jika sintesis berjalan 3'→5', koreksi baca (proofreading) akan memutus fosfat berenergi tinggi pada ujung 5' dan menghentikan sintesis."
+      },
+      {
+        id: 19,
+        topic: "Struktur tRNA & Hipotesis Wobble",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Di dalam sel manusia terdapat 61 macam kodon mRNA yang menyandi 20 jenis asam amino, namun jumlah jenis molekul tRNA fungsional yang dimiliki sel hanya sekitar 45 jenis. Bagaimana satu jenis molekul tRNA dapat mengenali lebih dari satu macam kodon mRNA yang berbeda?",
+        options: [
+          "Pasangan basa antara posisi ketiga kodon mRNA (ujung 3') dengan posisi pertama antikodon tRNA (ujung 5') bersifat fleksibel (pasangan wobble)",
+          "Satu molekul tRNA memiliki tiga lengan antikodon berbeda yang dapat berputar secara bergantian di dalam situs A ribosom",
+          "Enzim aminoasil-tRNA sintetase memotong basa ketiga pada kodon mRNA sebelum tRNA menempel pada ribosom",
+          "Molekul tRNA mengubah urutan basa antikodonnya secara acak setiap kali selesai melepaskan asam amino di situs E",
+          "Ribosom subunit kecil mengabaikan basa pertama pada setiap kodon mRNA sehingga hanya dua basa yang dibaca secara ketat"
+        ],
+        answer: 0,
+        explanation: "Menurut hipotesis Wobble (Francis Crick), pasangan basa antara basa ketiga kodon mRNA (5'→3') dan basa pertama antikodon tRNA (3'→5') memiliki kelonggaran geometris (misalnya Inosin pada antikodon dapat berpasangan dengan U, C, atau A pada kodon)."
+      },
+      {
+        id: 20,
+        topic: "DNA Ekstranuklear",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Seorang siswa menganalisis sampel DNA yang diisolasi dari organel mitokondria dan kloroplas sel tumbuhan dibandingkan dengan DNA dari nukleus sel yang sama. Ciri khas yang membedakan DNA mitokondria dan kloroplas dari DNA nukleus adalah ....",
+        options: [
+          "Berbentuk sirkular tertutup, tidak berasosiasi dengan protein histon, dan diwariskan secara maternal melalui sitoplasma ovum",
+          "Berbentuk linear panjang, berikatan erat dengan oktamer histon, serta mengalami pindah silang saat profase I meiosis",
+          "Tersusun atas utas tunggal RNA yang ditranskripsi balik menjadi DNA setiap kali sel melakukan pembelahan biner",
+          "Mengandung basa nitrogen Urasil sebagai pengganti Timin untuk mempercepat respirasi aerobik dan fotosintesis",
+          "Hanya ditemukan pada sel-sel meristem apikal dan akan menghilang sepenuhnya ketika sel mengalami diferensiasi"
+        ],
+        answer: 0,
+        explanation: "Sesuai teori endosimbiosis, DNA mitokondria (mtDNA) dan kloroplas (cpDNA) menyerupai DNA prokariotik: berbentuk sirkular, telanjang (tanpa histon), memiliki ribosom 70S sendiri, dan pada umumnya diwariskan melalui sitoplasma sel telur (maternal)."
+      },
+
+      // ==================== BAGIAN 3: REPLIKASI DNA (21 - 30) ====================
+      {
+        id: 21,
+        topic: "Eksperimen Meselson-Stahl",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Matthew Meselson dan Franklin Stahl menumbuhkan bakteri <em>E. coli</em> selama beberapa generasi dalam medium yang mengandung isotop berat <sup>15</sup>N sehingga seluruh DNA bakteri terlabel <sup>15</sup>N/<sup>15</sup>N. Bakteri tersebut kemudian dipindahkan ke medium yang hanya mengandung isotop ringan <sup>14</sup>N dan dibiarkan membelah hingga generasi ke-3 (3 kali replikasi). Jika seluruh DNA bakteri generasi ke-3 diekstraksi dan disentrifugasi dalam gradien kerapatan CsCl, proporsi pita DNA yang akan terbentuk adalah ....",
+        options: [
+          "0% pita berat (<sup>15</sup>N/<sup>15</sup>N), 25% pita hibrid (<sup>15</sup>N/<sup>14</sup>N), dan 75% pita ringan (<sup>14</sup>N/<sup>14</sup>N)",
+          "0% pita berat (<sup>15</sup>N/<sup>15</sup>N), 50% pita hibrid (<sup>15</sup>N/<sup>14</sup>N), dan 50% pita ringan (<sup>14</sup>N/<sup>14</sup>N)",
+          "12,5% pita berat (<sup>15</sup>N/<sup>15</sup>N), 0% pita hibrid (<sup>15</sup>N/<sup>14</sup>N), dan 87,5% pita ringan (<sup>14</sup>N/<sup>14</sup>N)",
+          "25% pita berat (<sup>15</sup>N/<sup>15</sup>N), 50% pita hibrid (<sup>15</sup>N/<sup>14</sup>N), dan 25% pita ringan (<sup>14</sup>N/<sup>14</sup>N)",
+          "0% pita berat (<sup>15</sup>N/<sup>15</sup>N), 100% pita hibrid (<sup>15</sup>N/<sup>14</sup>N), dan 0% pita ringan (<sup>14</sup>N/<sup>14</sup>N)"
+        ],
+        answer: 0,
+        explanation: "Sesuai model semikonservatif: Gen 0 = 1 molekul berat; Gen 1 = 2 molekul hibrid (100%); Gen 2 = 2 hibrid (50%) + 2 ringan (50%); Gen 3 = 8 molekul total yang terdiri atas 2 molekul hibrid (2/8 = 25%) dan 6 molekul ringan (6/8 = 75%)."
+      },
+      {
+        id: 22,
+        topic: "Enzim Replikasi DNA",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Pada garpu replikasi DNA bakteri, pembukaan lilitan heliks ganda oleh enzim helikase menimbulkan tegangan puntiran berlebih (<em>supercoiling</em> positif) di depan garpu replikasi. Apabila suatu senyawa antibiotik golongan kuinolon menghambat kerja enzim DNA girase (topoisomerase II), konsekuensi langsung yang terjadi pada proses replikasi adalah ....",
+        options: [
+          "Tegangan puntiran di depan garpu replikasi terakumulasi hingga menghentikan pergerakan helikase dan mematahkan rantai DNA",
+          "Fragmen-fragmen Okazaki pada lagging strand tidak dapat disambungkan karena tidak terbentuk ikatan fosfodiester",
+          "Primer RNA tidak dapat disintesis pada titik awal replikasi sehingga DNA polimerase III tidak memiliki ujung 3'-OH",
+          "Kedua untai tunggal DNA yang telah terbuka kembali berpasangan membentuk ikatan hidrogen sebelum sempat dicetak",
+          "Basa nitrogen yang salah pasang selama polimerisasi tidak dapat dikoreksi sehingga tingkat mutasi meningkat tajam"
+        ],
+        answer: 0,
+        explanation: "Topoisomerase (DNA girase pada bakteri) berfungsi meredakan tegangan puntiran (supercoiling) di depan garpu replikasi dengan memotong sementara, memutar, dan menyambung kembali untai DNA. Tanpa enzim ini, supercoiling menghentikan pergerakan helikase."
+      },
+      {
+        id: 23,
+        topic: "Leading & Lagging Strand",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Seorang peneliti mengisolasi galur mutan <em>E. coli</em> yang memiliki enzim DNA ligase non-fungsional pada suhu 42°C. Ketika sel mutan tersebut dibiarkan melakukan replikasi DNA pada suhu 42°C lalu DNA yang baru disintesis didenaturasi menjadi utas tunggal, profil ukuran molekul DNA yang ditemukan adalah ....",
+        options: [
+          "Terdapat untai DNA baru berukuran sangat panjang (dari leading strand) dan ribuan fragmen DNA pendek berukuran 1.000–2.000 nukleotida (dari lagging strand)",
+          "Seluruh DNA baru berukuran sangat pendek karena baik leading strand maupun lagging strand disintesis secara terputus-putus",
+          "Tidak ditemukan untai DNA baru sama sekali karena DNA ligase dibutuhkan untuk memulai pembukaan ikatan hidrogen heliks ganda",
+          "Hanya ditemukan untai DNA baru berukuran panjang karena sintesis lagging strand terhenti total sejak nukleotida pertama",
+          "Seluruh fragmen DNA baru masih mengandung primer RNA yang tidak dapat dilepaskan dari ujung 5' fragmen Okazaki"
+        ],
+        answer: 0,
+        explanation: "Leading strand disintesis secara kontinu sehingga hanya memerlukan satu ikatan penutup akhir, sedangkan lagging strand disintesis secara diskontinu dalam bentuk fragmen-fragmen Okazaki. Tanpa DNA ligase, fragmen Okazaki tetap terpisah-pisah sebagai potongan pendek."
+      },
+      {
+        id: 24,
+        topic: "Arah Replikasi Garpu Replikasi",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Perhatikan skema gelembung replikasi (<em>replication bubble</em>) yang bergerak secara dua arah (<em>bidirectional</em>) dari satu titik <em>origin of replication</em> (ori). Jika kita mengamati garpu replikasi di sisi sebelah kiri ori, untai cetakan (template) yang memiliki orientasi <code>3' → 5'</code> menjauhi ori akan digunakan untuk mensintesis ....",
+        options: [
+          "Leading strand secara kontinu ke arah kiri mengikuti pembukaan garpu replikasi",
+          "Lagging strand secara diskontinu ke arah kanan menuju titik origin of replication",
+          "Primer RNA sepanjang seluruh kromosom tanpa memerlukan bantuan DNA polimerase III",
+          "Untai komplementer dengan arah sintesis dari ujung 3' menuju ujung 5'",
+          "Fragmen Okazaki yang tidak memerlukan enzim primase karena langsung menempel pada ori"
+        ],
+        answer: 0,
+        explanation: "Pada garpu replikasi kiri, pembukaan heliks bergerak ke arah kiri. Jika untai template berorientasi 3'→5' ke arah kiri (menjauhi ori), maka untai baru disintesis 5'→3' ke arah kiri (searah pembukaan garpu), sehingga untai tersebut adalah leading strand."
+      },
+      {
+        id: 25,
+        topic: "Peran DNA Polimerase I",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Pada prokariotik, sintesis fragmen Okazaki diawali oleh primer RNA pendek sepanjang ±10 nukleotida. Setelah DNA polimerase III selesai memperpanjang fragmen hingga mencapai primer RNA fragmen sebelumnya, tahapan enzimatik berikutnya yang terjadi secara berurutan adalah ....",
+        options: [
+          "DNA polimerase I menghapus primer RNA menggunakan aktivitas eksonuklease 5'→3' dan menggantinya dengan deoksiribonukleotida, lalu DNA ligase menyambung celah",
+          "Helikase memotong primer RNA dengan aktivitas endonuklease, lalu primase mengisi celah dengan nukleotida DNA baru",
+          "DNA polimerase III mundur ke belakang menggunakan aktivitas eksonuklease 3'→5' untuk mengubah ribosa menjadi deoksiribosa",
+          "Topoisomerase menggabungkan ujung 5'-fosfat primer RNA langsung ke ujung 3'-OH fragmen Okazaki tanpa menghapus RNA",
+          "RNA polimerase mentranskripsi ulang daerah primer menjadi DNA sebelum akhirnya dipotong oleh protein SSB"
+        ],
+        answer: 0,
+        explanation: "DNA polimerase I memiliki aktivitas eksonuklease 5'→3' yang unik untuk mendegradasi primer RNA dari ujung 5' sekaligus mengisi celahnya dengan DNA menggunakan ujung 3'-OH fragmen di sebelahnya sebagai primer, sebelum disegel oleh DNA ligase."
+      },
+      {
+        id: 26,
+        topic: "Proofreading Replikasi DNA",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Tingkat kesalahan pemasangan basa oleh DNA polimerase III saat polimerisasi awal adalah sekitar 1 per 10<sup>5</sup> nukleotida, namun tingkat mutasi akhir setelah replikasi selesai turun drastis menjadi 1 per 10<sup>9</sup>–10<sup>10</sup> nukleotida. Kemampuan koreksi baca (<em>proofreading</em>) oleh DNA polimerase III ini bergantung pada aktivitas ....",
+        options: [
+          "Eksonuklease 3'→5' yang memotong nukleotida salah pasang pada ujung 3' rantai baru sebelum melanjutkan polimerisasi",
+          "Eksonuklease 5'→3' yang memotong seluruh rantai template lama dan menggantinya dengan urutan basa yang baru",
+          "Endonuklease restriksi yang memotong kedua untai heliks ganda DNA setiap kali ditemukan pasangan basa G-T",
+          "Metiltransferase yang menambahkan gugus metil pada basa yang salah pasang agar dapat dibaca sebagai basa normal",
+          "Helikase yang memutar balik arah garpu replikasi sehingga seluruh kromosom direplikasi ulang dari awal"
+        ],
+        answer: 0,
+        explanation: "Ketika basa yang salah terpasang pada ujung 3', geometri pasangan basa terganggu sehingga enzim berhenti dan menggunakan domain eksonuklease 3'→5' untuk membuang nukleotida yang keliru tersebut sebelum melanjutkan sintesis 5'→3'."
+      },
+      {
+        id: 27,
+        topic: "Analog Nukleotida (ddNTP)",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Dalam metode sekuensing DNA Sanger (dan beberapa obat antivirus seperti AZT), digunakan dideoksinukleotida trifosfat (ddNTP) yang kehilangan gugus hidroksil (-OH) baik pada atom karbon nomor 2' maupun nomor 3'. Jika molekul ddGTP ikut terinkorporasi ke dalam rantai DNA yang sedang direplikasi, akibat yang terjadi adalah ....",
+        options: [
+          "Sintesis rantai DNA tersebut langsung terhenti (terminasi rantai) karena tidak tersedia ujung 3'-OH untuk membentuk ikatan fosfodiester berikutnya",
+          "Basa Guanin pada ddGTP akan berpasangan dengan Adenin sehingga menyebabkan mutasi transversi di seluruh genom",
+          "Laju replikasi meningkat dua kali lipat karena enzim DNA polimerase tidak perlu melepaskan molekul pirofosfat",
+          "DNA ligase akan memotong seluruh rantai DNA yang mengandung ddGTP menjadi fragmen-fragmen kecil",
+          "Untai DNA baru berubah menjadi hibrid DNA-RNA yang sangat stabil di dalam nukleus"
+        ],
+        answer: 0,
+        explanation: "Pembentukan ikatan fosfodiester mutlak membutuhkan gugus -OH pada karbon 3' nukleotida terakhir. Karena ddNTP tidak memiliki gugus 3'-OH, penambahan nukleotida berikutnya tidak dapat terjadi (chain termination)."
+      },
+      {
+        id: 28,
+        topic: "Masalah Replikasi Ujung Kromosom",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Mengapa masalah pemendekan ujung kromosom (<em>end-replication problem</em>) hanya terjadi pada kromosom linear eukariotik dan tidak terjadi pada kromosom sirkular bakteri <em>E. coli</em>?",
+        options: [
+          "Kromosom sirkular tidak memiliki ujung 5' bebas; primer RNA terakhir selalu memiliki ujung 3'-OH DNA di depannya untuk diisi oleh DNA polimerase I",
+          "Bakteri memiliki enzim telomerase yang bekerja sepanjang siklus sel untuk menambahkan sekuens berulang di seluruh kromosom",
+          "Replikasi DNA pada bakteri tidak memerlukan primer RNA sehingga seluruh kromosom langsung disintesis sebagai DNA utuh",
+          "Kromosom bakteri tersusun atas untai ganda RNA yang tidak mengalami degradasi oleh enzim eksonuklease seluler",
+          "Bakteri hanya mereplikasi salah satu untai DNA-nya setiap generasi sehingga panjang kromosom selalu terjaga konstan"
+        ],
+        answer: 0,
+        explanation: "Pada kromosom linear, penghapusan primer RNA paling ujung pada lagging strand menyisakan celah tanpa ujung 3'-OH di depannya sehingga tidak dapat diisi DNA polimerase. Pada kromosom sirkular, lingkaran tertutup menyediakan ujung 3'-OH DNA di depan setiap celah primer."
+      },
+      {
+        id: 29,
+        topic: "Ori Prokariotik vs Eukariotik",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Kecepatan polimerisasi DNA pada manusia (sekitar 50 nukleotida/detik) jauh lebih lambat dibandingkan pada bakteri <em>E. coli</em> (sekitar 1.000 nukleotida/detik), padahal ukuran genom manusia hampir 700 kali lebih besar. Sel manusia dapat menyelesaikan replikasi seluruh genomnya dalam waktu sekitar 8 jam pada fase S karena ....",
+        options: [
+          "Setiap kromosom eukariotik memiliki ratusan hingga ribuan titik awal replikasi (multiple ori) yang bekerja secara serentak",
+          "Sel manusia melakukan replikasi dengan model konservatif sehingga tidak perlu membuka lilitan heliks ganda DNA",
+          "Enzim helikase manusia memotong kromosom menjadi ribuan plasmid kecil sebelum fase S dimulai",
+          "Sel manusia hanya mereplikasi 1,5% bagian genom yang merupakan ekson dan mengabaikan seluruh daerah intron",
+          "Protein histon langsung menyintesis untai DNA baru tanpa menunggu pergerakan enzim DNA polimerase"
+        ],
+        answer: 0,
+        explanation: "Kromosom eukariotik memiliki banyak titik origin of replication (multi-ori) di sepanjang kromosomnya sehingga ribuan gelembung replikasi bekerja paralel secara bersamaan."
+      },
+      {
+        id: 30,
+        topic: "Mutasi Enzim Primase",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Suatu kultur bakteri <em>E. coli</em> mutan suhu-sensitif pada gen penyandi enzim primase (<em>dnaG</em>) dipindahkan secara mendadak dari suhu permisif 30°C ke suhu restriktif 42°C saat sedang berada di tengah proses replikasi kromosomnya. Pengamatan biokimia yang paling tepat segera setelah kenaikan suhu tersebut adalah ....",
+        options: [
+          "Sintesis leading strand yang sedang berjalan tetap berlanjut hingga selesai, sedangkan inisiasi fragmen Okazaki baru pada lagging strand langsung terhenti",
+          "Sintesis lagging strand tetap berjalan normal karena tidak membutuhkan primer, sedangkan leading strand langsung berhenti",
+          "Baik leading strand maupun lagging strand langsung terhenti secara bersamaan dalam waktu kurang dari satu detik",
+          "Enzim DNA polimerase III mengambil alih fungsi primase dengan menyintesis primer dari molekul deoksiribonukleotida",
+          "Seluruh ikatan hidrogen antarbasa terputus dan kromosom bakteri terurai menjadi nukleotida bebas"
+        ],
+        answer: 0,
+        explanation: "Leading strand hanya membutuhkan satu primer di titik awal (ori), sehingga jika sudah melewati tahap inisiasi, pemanjangannya terus berlanjut. Sebaliknya, lagging strand membutuhkan primer RNA baru berulang kali untuk setiap fragmen Okazaki baru, sehingga langsung terhenti saat primase tidak aktif."
+      },
+
+      // ==================== BAGIAN 4: TRANSKRIPSI & PEMROSESAN RNA (31 - 40) ====================
+      {
+        id: 31,
+        topic: "RNA Polimerase vs DNA Polimerase",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Dalam suatu percobaan in vitro, dua tabung reaksi disiapkan: Tabung 1 berisi DNA template utas tunggal, dNTP, ion Mg<sup>2+</sup>, dan DNA polimerase; Tabung 2 berisi DNA template utas tunggal, NTP, ion Mg<sup>2+</sup>, dan RNA polimerase. Kedua tabung tidak ditambahkan primer oligonukleotida. Hasil reaksi yang akan terjadi setelah inkubasi adalah ....",
+        options: [
+          "Tabung 1 tidak menghasilkan produk polimer karena DNA polimerase mutlak membutuhkan primer, sedangkan Tabung 2 menghasilkan rantai RNA baru",
+          "Tabung 1 menghasilkan rantai DNA komplementer lengkap, sedangkan Tabung 2 gagal karena RNA polimerase membutuhkan primer RNA",
+          "Kedua tabung tidak menghasilkan produk karena baik DNA maupun RNA polimerase membutuhkan enzim helikase",
+          "Kedua tabung menghasilkan produk polimer dengan arah sintesis dari ujung 3' menuju ujung 5'",
+          "Tabung 2 menghasilkan rantai DNA hibrid karena RNA polimerase dapat menggunakan NTP untuk membentuk deoksiribosa"
+        ],
+        answer: 0,
+        explanation: "Perbedaan krusial antara kedua enzim adalah RNA polimerase mampu memulai sintesis rantai RNA secara de novo (tanpa primer), sedangkan DNA polimerase hanya dapat menambahkan nukleotida pada ujung 3'-OH primer yang sudah ada."
+      },
+      {
+        id: 32,
+        topic: "Transkripsi DNA ke mRNA",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Diketahui sekuens untai DNA cetakan (<em>template / antisense</em>) suatu gen adalah sebagai berikut:<br><div class='my-2 p-2.5 bg-slate-50 border border-slate-200 rounded-lg seq-font text-xs font-semibold text-slate-800'>3' - T A C &nbsp; G G A &nbsp; C C T &nbsp; A G C &nbsp; A T T - 5'</div>Urutan basa nitrogen pada untai DNA <em>coding</em> (sense) dan molekul mRNA hasil transkripsinya secara berturut-turut adalah ....",
+        options: [
+          "DNA coding: 5'-ATG CCT GGA TCG TAA-3' dan mRNA: 5'-AUG CCU GGA UCG UAA-3'",
+          "DNA coding: 3'-ATG CCT GGA TCG TAA-5' dan mRNA: 3'-AUG CCU GGA UCG UAA-5'",
+          "DNA coding: 5'-UAC GGA CCU AGC AUU-3' dan mRNA: 5'-ATG CCT GGA TCG TAA-3'",
+          "DNA coding: 5'-AAT GCT AGG TCC GTA-3' dan mRNA: 5'-AAU GCU AGG UCC GUA-3'",
+          "DNA coding: 3'-TAC GGA CCT AGC ATT-5' dan mRNA: 5'-UAC GGA CCU AGC AUU-3'"
+        ],
+        answer: 0,
+        explanation: "Dari DNA template 3'-TAC GGA CCT AGC ATT-5', transkripsi menghasilkan mRNA komplementer 5'-AUG CCU GGA UCG UAA-3'. Sementara untai DNA coding (sense) berorientasi 5'→3' dan memiliki urutan identik dengan mRNA (kecuali U diganti T), yaitu 5'-ATG CCT GGA TCG TAA-3'."
+      },
+      {
+        id: 33,
+        topic: "Inisiasi Transkripsi Eukariotik",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Pada sel eukariotik, RNA polimerase II tidak dapat mengenali dan menempel secara langsung pada promoter gen. Mutasi titik pada sekuens <code>TATAAA</code> (TATA box) di daerah promoter yang mengubahnya menjadi <code>CGCGCG</code> akan mengakibatkan ....",
+        options: [
+          "Protein pengikat TATA (TBP/TFIID) gagal berikatan dengan promoter sehingga kompleks inisiasi transkripsi tidak terbentuk dan ekspresi gen menurun drastis",
+          "Enzim RNA polimerase II menempel terlalu kuat pada promoter sehingga tidak mampu bergerak melakukan elongasi mRNA",
+          "Ribosom subunit kecil gagal mengenali kodon start AUG pada ujung 5' mRNA saat proses translasi di sitoplasma",
+          "Spliseosom memotong seluruh bagian ekson dan mempertahankan bagian intron di dalam mRNA matang",
+          "Sintesis mRNA tetap berjalan normal karena TATA box hanya berfungsi sebagai sinyal terminasi transkripsi"
+        ],
+        answer: 0,
+        explanation: "TATA box adalah elemen promoter inti pada eukariotik yang dikenali oleh faktor transkripsi TFIID (melalui subunit TBP). Pengikatan ini merupakan langkah awal perakitan kompleks inisiasi transkripsi untuk merekrut RNA polimerase II."
+      },
+      {
+        id: 34,
+        topic: "Terminasi Transkripsi Prokariotik",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Pada transkripsi bakteri <em>E. coli</em>, salah satu mekanisme terminasi transkripsi (terminasi intrinsik / tidak bergantung Rho) terjadi ketika RNA polimerase mentranskripsi daerah kaya basa G-C yang diikuti deretan basa Adenin pada cetakan DNA. Mekanisme fisik yang menyebabkan RNA polimerase terlepas dari DNA adalah ....",
+        options: [
+          "Transkrip RNA membentuk struktur jepit rambut (hairpin loop) G≡C yang stabil sehingga menarik RNA keluar dan memutus ikatan lemah pasangan basa rU-dA",
+          "Protein faktor Rho mengejar RNA polimerase dengan energi ATP dan memotong rantai mRNA menggunakan aktivitas endonuklease",
+          "Deretan basa Urasil pada mRNA membentuk tiga ikatan hidrogen kuat dengan Adenin DNA sehingga mengunci pergerakan polimerase",
+          "Subunit faktor sigma kembali menempel pada inti enzim RNA polimerase dan mengubah bentuk situs aktifnya",
+          "DNA helikase masuk ke dalam gelembung transkripsi dan menyambungkan kembali kedua untai DNA secara paksa"
+        ],
+        answer: 0,
+        explanation: "Pada terminasi intrinsik, daerah palindromik kaya G-C pada RNA melipat membentuk struktur hairpin (jepit rambut) yang menghambat RNA polimerase, sementara deretan pasangan rU-dA di belakangnya memiliki ikatan hidrogen paling lemah sehingga transkrip RNA terlepas dari cetakan DNA."
+      },
+      {
+        id: 35,
+        topic: "Modifikasi Pascatranskripsi",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Sebelum ditranspor keluar dari nukleus menuju sitoplasma, transkrip primer (pre-mRNA) sel eukariotik mengalami penambahan tudung 5' (7-metilguanosin) dan ekor poli-A pada ujung 3'. Jika suatu mutasi menghambat proses penambahan ekor poli-A oleh enzim poli-A polimerase, dampak yang paling mungkin terjadi adalah ....",
+        options: [
+          "Molekul mRNA mengalami kesulitan diekspor melalui pori nukleus dan cepat didegradasi oleh enzim eksonuklease di sitoplasma",
+          "Transkripsi berhenti di tengah gen sebelum RNA polimerase II mencapai kodon stop pada ujung 3'",
+          "Asam amino metionin tidak dapat diikatkan pada ujung 5' rantai polipeptida selama inisiasi translasi",
+          "Intron pada pre-mRNA berubah fungsi menjadi ekson yang menyandi domain transmembran protein",
+          "mRNA berubah menjadi tRNA dan mulai mengangkut asam amino bebas menuju ribosom"
+        ],
+        answer: 0,
+        explanation: "Tudung 5' dan ekor poli-A (50–250 nukleotida Adenin) melindungi mRNA dari degradasi eksonuklease, memfasilitasi ekspor mRNA dari nukleus ke sitoplasma, serta membantu pengikatan ribosom saat translasi."
+      },
+      {
+        id: 36,
+        topic: "RNA Splicing",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Perhatikan diagram struktur suatu gen eukariotik berikut:<br><div class='my-2 p-2.5 bg-slate-50 border border-slate-200 rounded-lg seq-font text-xs text-center'>[Promoter] — [Ekson 1 (150 pb)] — [Intron 1 (400 pb)] — [Ekson 2 (240 pb)] — [Intron 2 (350 pb)] — [Ekson 3 (180 pb)] — [Terminator]</div>Setelah pre-mRNA mengalami pemrosesan lengkap (<em>RNA splicing</em>), panjang segmen penyandi (ekson gabungan) pada mRNA matang yang siap ditranslasikan adalah ....",
+        options: [
+          "570 nukleotida",
+          "1.320 nukleotida",
+          "750 nukleotida",
+          "420 nukleotida",
+          "190 nukleotida"
+        ],
+        answer: 0,
+        explanation: "Dalam proses RNA splicing oleh spliseosom, seluruh intron (Intron 1 = 400 pb dan Intron 2 = 350 pb) dibuang, sedangkan ekson-ekson disambungkan menjadi satu: 150 + 240 + 180 = 570 nukleotida."
+      },
+      {
+        id: 37,
+        topic: "Alternative Splicing",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Gen <em>Dscam</em> pada lalat buah <em>Drosophila melanogaster</em> dapat menghasilkan lebih dari 38.000 isoform protein reseptor akson yang berbeda hanya dari satu gen tunggal di dalam genomnya. Mekanisme genetik yang memungkinkan satu gen menghasilkan beragam varian protein berbeda pada tipe sel yang berbeda adalah ....",
+        options: [
+          "Alternative splicing (penyambungan alternatif), di mana kombinasi ekson yang berbeda dipilih untuk digabungkan dalam mRNA matang",
+          "Replikasi semikonservatif yang menggandakan jumlah gen di dalam sel saraf hingga ribuan kali lipat selama perkembangan larva",
+          "Mutasi acak yang diinduksi oleh ribosom pada saat pembacaan kodon di situs P dan situs A",
+          "Penggunaan kode genetik yang berbeda pada setiap jaringan tubuh (misalnya satu kodon menyandi tiga asam amino berbeda)",
+          "Penggabungan fragmen-fragmen Okazaki secara acak oleh enzim DNA ligase sebelum transkripsi dimulai"
+        ],
+        answer: 0,
+        explanation: "Alternative splicing memungkinkan pre-mRNA dari satu gen yang sama disambung dengan kombinasi ekson berbeda (beberapa ekson dipertahankan atau dilewati), sehingga menghasilkan berbagai varian mRNA dan isoform protein yang berbeda."
+      },
+      {
+        id: 38,
+        topic: "Hibridisasi DNA-mRNA",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Seorang peneliti melakukan hibridisasi antara utas tunggal DNA suatu gen eukariotik dengan mRNA matang yang diisolasi dari sitoplasma sel yang sama, lalu mengamatinya di bawah mikroskop elektron. Hasil pengamatan menunjukkan terbentuknya tiga buah lengkungan (<em>loop</em>) utas tunggal DNA yang tidak berpasangan dengan mRNA. Interpretasi yang tepat dari hasil pengamatan tersebut adalah ....",
+        options: [
+          "Gen tersebut memiliki 3 segmen intron (yang membentuk loop DNA karena tidak ada di mRNA matang) dan 4 segmen ekson",
+          "Gen tersebut memiliki 3 segmen ekson dan 4 segmen intron yang telah terdegradasi di dalam nukleus",
+          "mRNA matang tersebut mengalami tiga kali mutasi insersi sehingga panjangnya melebihi panjang gen DNA",
+          "Tiga loop tersebut merupakan daerah promoter, operator, dan terminator yang ikut ditranskripsikan ke dalam mRNA",
+          "Gen tersebut berasal dari organisme prokariotik yang tidak memiliki mekanisme pemrosesan RNA"
+        ],
+        answer: 0,
+        explanation: "Karena intron telah dibuang dari mRNA matang, daerah intron pada DNA tidak memiliki pasangan komplementer pada mRNA sehingga menonjol keluar sebagai loop utas tunggal. Jika terdapat 3 loop intron di antara daerah hibrid, maka terdapat 4 segmen ekson yang mengapitnya."
+      },
+      {
+        id: 39,
+        topic: "Mutasi Situs Splicing",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Sebagian besar intron pada pre-mRNA eukariotik diawali dengan dinukleotida <code>5'-GU</code> (situs donor) dan diakhiri dengan <code>AG-3'</code> (situs akseptor). Pada beberapa kasus penyakit talasemia-beta, ditemukan mutasi titik yang mengubah <code>5'-GU</code> pada batas awal Intron 1 menjadi <code>5'-AU</code>. Dampak langsung dari mutasi ini terhadap mRNA matang adalah ....",
+        options: [
+          "Spliseosom gagal mengenali batas awal Intron 1 sehingga sekuens intron ikut terbawa ke dalam mRNA matang dan menghasilkan protein abnormal/terpotong",
+          "Enzim RNA polimerase II berhenti mentranskripsi gen tepat pada batas Intron 1",
+          "Tudung 5'-metilguanosin terpasang di tengah molekul mRNA menggantikan kodon start AUG",
+          "Seluruh ekson pada gen tersebut ikut terpotong bersama intron sehingga tidak ada mRNA yang terbentuk",
+          "Translasi tetap menghasilkan rantai polipeptida normal karena ribosom dapat melewati sekuens intron secara otomatis"
+        ],
+        answer: 0,
+        explanation: "Mutasi pada situs splice donor (GU→AU) mencegah pengikatan snRNP U1 dari spliseosom. Akibatnya, intron tidak dipotong (intron retention) dan ikut ditranslasikan, sering kali memunculkan kodon stop prematur."
+      },
+      {
+        id: 40,
+        topic: "Transkripsi Prokariotik vs Eukariotik",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Pada sel bakteri <em>E. coli</em>, ribosom sudah mulai menempel pada ujung 5' mRNA dan menyintesis polipeptida bahkan ketika ujung 3' mRNA tersebut masih dalam proses ditranskripsi oleh RNA polimerase. Fenomena <em>coupled transcription-translation</em> ini tidak mungkin terjadi pada sel eukariotik karena ....",
+        options: [
+          "Sel eukariotik memiliki membran inti (karioteka) yang memisahkan lokasi transkripsi di nukleus dari lokasi translasi di sitoplasma, serta memerlukan pemrosesan pre-mRNA terlebih dahulu",
+          "RNA polimerase eukariotik mensintesis mRNA dari arah 3' ke 5', sedangkan ribosom hanya dapat membaca mRNA dari arah 5' ke 3'",
+          "Ribosom sel eukariotik hanya berada di dalam matriks mitokondria sehingga mRNA harus melewati dua lapis membran organel",
+          "Sel eukariotik tidak memiliki molekul tRNA bebas di sitoplasma sebelum fase mitosis berakhir",
+          "mRNA eukariotik bersifat polisistronik sehingga harus dipotong-potong oleh enzim restriksi sebelum ribosom dapat menempel"
+        ],
+        answer: 0,
+        explanation: "Adanya kompartementalisasi oleh selubung nukleus pada sel eukariotik memisahkan ruang dan waktu antara transkripsi/pemrosesan RNA di nukleus dengan translasi di sitoplasma."
+      },
+
+      // ==================== BAGIAN 5: TRANSLASI, KODE GENETIK & MUTASI (41 - 50) ====================
+      {
+        id: 41,
+        topic: "Sifat Kode Genetik",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Kode genetik bersifat degenerat (redundan), misalnya asam amino Leusin disandi oleh enam kodon berbeda (UUA, UUG, CUU, CUC, CUA, CUG). Keuntungan evolusioner dari sifat redundansi kode genetik ini bagi kelangsungan hidup organisme adalah ....",
+        options: [
+          "Meminimalkan dampak merugikan dari mutasi substitusi basa (terutama pada basa ketiga kodon) sehingga urutan asam amino protein tetap terjaga (silent mutation)",
+          "Memungkinkan satu molekul mRNA yang sama diterjemahkan menjadi enam jenis enzim berbeda secara bersamaan",
+          "Mempercepat laju replikasi DNA karena sel tidak perlu melakukan koreksi baca pada pasangan basa ketiga",
+          "Menghilangkan kebutuhan akan kodon stop sehingga sintesis protein dapat berlangsung tanpa batas waktu",
+          "Membuat kode genetik bersifat spesifik untuk setiap spesies sehingga mencegah transfer gen horizontal antarbakteri"
+        ],
+        answer: 0,
+        explanation: "Redundansi (degenerasi) kode genetik menjadi penyangga (buffer) terhadap mutasi titik: perubahan pada basa ketiga kodon (misalnya CUU menjadi CUC) sering kali tetap menyandi asam amino yang sama (Leusin), sehingga fungsi protein tidak berubah."
+      },
+      {
+        id: 42,
+        topic: "Analisis Rantai Polipeptida",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Perhatikan sekuens untai DNA cetakan (<em>template</em>) berikut:<br><div class='my-2 p-2.5 bg-slate-50 border border-slate-200 rounded-lg seq-font text-xs font-semibold'>3' - G G C &nbsp; T A C &nbsp; C G A &nbsp; T T T &nbsp; A C T &nbsp; G G A - 5'</div>Gunakan tabel kodon mRNA berikut: <code>AUG = Met (Start)</code>; <code>CCG = Pro</code>; <code>GCU = Ala</code>; <code>AAA = Lys</code>; <code>CCU = Pro</code>; <code>UGA = Stop</code>. Urutan asam amino polipeptida yang terbentuk dari pembacaan bingkai baca terbuka (<em>open reading frame</em>) yang tepat adalah ....",
+        options: [
+          "Met – Ala – Lys",
+          "Pro – Met – Ala – Lys – Stop – Pro",
+          "Met – Ala – Lys – Pro",
+          "Pro – Tyr – Arg – Phe – Thr – Gly",
+          "Met – Arg – Phe – Stop"
+        ],
+        answer: 0,
+        explanation: "Transkripsi dari DNA template 3'-GGC TAC CGA TTT ACT GGA-5' menghasilkan mRNA: 5'-CCG AUG GCU AAA UGA CCU-3'. Translasi dimulai tepat pada kodon start AUG (Met), dilanjutkan GCU (Ala), AAA (Lys), dan berhenti pada kodon stop UGA (tidak menyandi asam amino). Jadi polipeptidanya adalah Met – Ala – Lys."
+      },
+      {
+        id: 43,
+        topic: "Antikodon tRNA",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Sebuah segmen untai DNA <em>coding</em> (non-template / sense) memiliki urutan basa nitrogen:<br><div class='my-2 p-2.5 bg-slate-50 border border-slate-200 rounded-lg seq-font text-xs font-semibold'>5' - A T G &nbsp; T G G &nbsp; C A C &nbsp; G T A - 3'</div>Urutan antikodon pada empat molekul tRNA yang secara berurutan membawa asam amino untuk mRNA hasil transkripsi segmen gen tersebut adalah ....",
+        options: [
+          "3'-UAC-5', 3'-ACC-5', 3'-GUG-5', 3'-CAU-5'",
+          "5'-AUG-3', 5'-UGG-3', 5'-CAC-3', 5'-GUA-3'",
+          "3'-TAC-5', 3'-ACC-5', 3'-GTG-5', 3'-CAT-5'",
+          "3'-AUG-5', 3'-UGG-5', 3'-CAC-5', 3'-GUA-5'",
+          "5'-UAC-3', 5'-ACC-3', 5'-GUG-3', 5'-CAU-3'"
+        ],
+        answer: 0,
+        explanation: "Untai DNA coding 5'-ATG TGG CAC GTA-3' memiliki urutan yang sama dengan mRNA (dengan T diganti U): 5'-AUG UGG CAC GUA-3'. Antikodon tRNA berpasangan antiparalel (3'→5') dengan kodon mRNA: 3'-UAC-5', 3'-ACC-5', 3'-GUG-5', dan 3'-CAU-5'."
+      },
+      {
+        id: 44,
+        topic: "Dinamika Situs A, P, dan E Ribosom",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Selama tahap elongasi translasi, ribosom memiliki tiga situs pengikatan tRNA: situs A (Aminoasil), situs P (Peptidil), dan situs E (Exit). Jika sebuah senyawa toksin menghambat kerja faktor elongasi EF-G (translokase) sehingga ribosom gagal bergeser sejauh satu kodon ke arah ujung 3' mRNA, kondisi yang akan teramati pada kompleks ribosom adalah ....",
+        options: [
+          "tRNA pembawa rantai polipeptida tetap tertahan di situs A dan tRNA kosong tetap berada di situs P, sehingga situs A terblokir bagi aminoasil-tRNA berikutnya",
+          "tRNA inisiator pembawa metionin gagal menempel pada kodon start AUG di ribosom subunit kecil",
+          "Ikatan peptida antara asam amino di situs P dan situs A gagal terbentuk karena aktivitas ribozim terhambat",
+          "Faktor pelepas (release factor) langsung masuk ke situs E dan memutus rantai polipeptida secara prematur",
+          "Subunit besar dan subunit kecil ribosom langsung terpisah sebelum kodon kedua sempat dibaca"
+        ],
+        answer: 0,
+        explanation: "Setelah ikatan peptida terbentuk, rantai polipeptida berpindah ke tRNA di situs A, sementara tRNA kosong berada di situs P. Tanpa translokasi (EF-G), pergeseran A→P dan P→E gagal terjadi sehingga situs A tetap terisi dan menghalangi masuknya tRNA baru."
+      },
+      {
+        id: 45,
+        topic: "Aminoasil-tRNA Sintetase",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Ketepatan penerjemahan informasi genetik bergantung pada dua tahap pengenalan: pengikatan asam amino spesifik ke molekul tRNA yang tepat, dan pemasangan kodon-antikodon di ribosom. Jika suatu mutasi mengubah situs aktif enzim <em>tirosil-tRNA sintetase</em> sehingga enzim tersebut mengikatkan asam amino Fenilalanin pada tRNA<sup>Tyr</sup> (yang memiliki antikodon 3'-AUA-5'), dampak yang akan terjadi pada sintesis protein sel adalah ....",
+        options: [
+          "Setiap kodon UAU atau UAC pada mRNA yang seharusnya menyandi Tirosin akan diisi oleh asam amino Fenilalanin",
+          "Ribosom akan menolak masuknya tRNA<sup>Tyr</sup> yang membawa Fenilalanin karena ribosom memeriksa jenis asam aminonya",
+          "Seluruh kodon UUU dan UUC pada mRNA akan berubah menjadi kodon stop dan menghentikan translasi",
+          "Enzim RNA polimerase akan memperbaiki kesalahan tersebut dengan mengubah kodon UAU menjadi UUU pada mRNA",
+          "Asam amino Tirosin akan langsung berikatan dengan kodon mRNA tanpa memerlukan perantara molekul tRNA"
+        ],
+        answer: 0,
+        explanation: "Ribosom hanya memeriksa kecocokan pasangan basa antara kodon mRNA dan antikodon tRNA, bukan jenis asam amino yang dibawa tRNA. Oleh karena itu, tRNA<sup>Tyr</sup> yang keliru dimuati Fenilalanin tetap masuk ke kodon Tirosin (UAU/UAC) dan menyisipkan Fenilalanin."
+      },
+      {
+        id: 46,
+        topic: "Terminasi Translasi",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Ketika ribosom mencapai kodon stop <code>5'-UAG-3'</code> pada mRNA di situs A, proses sintesis rantai polipeptida berakhir. Peristiwa molekuler yang secara langsung memicu pelepasan rantai polipeptida dari tRNA terakhir di situs P adalah ....",
+        options: [
+          "Protein faktor pelepas (release factor) masuk ke situs A dan mengatalisis penambahan molekul air (hidrolisis) pada ikatan ester antara polipeptida dan tRNA di situs P",
+          "Molekul tRNA khusus pembawa asam amino terminal masuk ke situs A dan memutus ikatan peptida dengan enzim protease",
+          "Ujung 3' mRNA melipat masuk ke situs A dan memutus ikatan hidrogen antara kodon dan antikodon di situs P",
+          "Ribosom subunit besar terdegradasi oleh lisosom sehingga rantai polipeptida jatuh bebas ke dalam sitoplasma",
+          "Enzim DNA ligase memutus ikatan kovalen antara asam amino pertama (metionin) dengan gugus fosfat ribosom"
+        ],
+        answer: 0,
+        explanation: "Tidak ada tRNA yang mengenali kodon stop (UAA, UAG, UGA). Sebagai gantinya, release factor (faktor pelepas) berikatan dengan kodon stop di situs A dan mendorong hidrolisis ikatan antara polipeptida dan tRNA di situs P."
+      },
+      {
+        id: 47,
+        topic: "Analisis Mutasi Titik pada Ekspresi Gen",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Sebuah kodon pada untai DNA <em>coding</em> (sense) normal adalah <code>5'-TGG-3'</code> (menyandi asam amino Triptofan, kodon mRNA <code>5'-UGG-3'</code>). Akibat paparan sinar UV, terjadi mutasi substitusi basa ketiga sehingga kodon DNA coding berubah menjadi <code>5'-TGA-3'</code>. Jenis mutasi dan konsekuensi fungsionalnya terhadap protein yang dihasilkan adalah ....",
+        options: [
+          "Mutasi nonsense (mutasi tanpa arti); mengubah kodon asam amino menjadi kodon stop UGA sehingga menghasilkan polipeptida yang memendek (terpotong) dan umumnya tidak fungsional",
+          "Mutasi silent (mutasi diam); kodon UGA tetap menyandi asam amino Triptofan sehingga struktur protein tidak berubah sama sekali",
+          "Mutasi missense (mutasi salah arti); mengganti Triptofan dengan satu asam amino lain tanpa mengubah panjang rantai polipeptida",
+          "Mutasi frameshift (pergeseran kerangka baca); seluruh kodon setelah posisi mutasi bergeser satu basa ke arah ujung 3'",
+          "Mutasi inversi; membalikkan arah pembacaan ribosom dari ujung 3' menuju ujung 5' mRNA"
+        ],
+        answer: 0,
+        explanation: "DNA coding 5'-TGA-3' menghasilkan kodon mRNA 5'-UGA-3', yang merupakan salah satu dari tiga kodon stop (UAA, UAG, UGA). Perubahan kodon asam amino menjadi kodon stop disebut mutasi nonsense dan menyebabkan terminasi translasi prematur."
+      },
+      {
+        id: 48,
+        topic: "Mutasi Frameshift vs Delesi In-Frame",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Pada penyakit fibrosis kistik (<em>cystic fibrosis</em>), mutasi paling umum (ΔF508) adalah hilangnya tepat 3 pasang basa berturut-turut di daerah tengah gen CFTR, sedangkan mutasi lain dapat berupa hilangnya 1 pasang basa pada posisi yang sama. Mengapa hilangnya 1 pasang basa umumnya menimbulkan kerusakan struktur primer protein yang jauh lebih parah daripada hilangnya 3 pasang basa?",
+        options: [
+          "Hilangnya 1 pasang basa menggeser kerangka baca (frameshift) seluruh kodon triplet di hilir mutasi sehingga mengubah semua asam amino berikutnya dan sering memunculkan kodon stop dini",
+          "Hilangnya 1 pasang basa menyebabkan seluruh kromosom gagal berpisah saat anafase mitosis (nondisjunction)",
+          "Hilangnya 3 pasang basa tidak memengaruhi jumlah asam amino karena ribosom dapat mengisi celah tiga basa dengan asam amino acak",
+          "Hilangnya 1 pasang basa menghentikan proses transkripsi seluruh gen lain yang berada pada kromosom yang sama",
+          "Hilangnya 3 pasang basa selalu dibuang bersama intron selama proses splicing sehingga tidak pernah memengaruhi ekson"
+        ],
+        answer: 0,
+        explanation: "Karena kode genetik dibaca per tiga basa (triplet) tanpa tanda koma, delesi 1 atau 2 basa (bukan kelipatan 3) menggeser kerangka baca (frameshift) seluruh triplet setelah titik mutasi. Delesi 3 basa hanya menghilangkan satu asam amino tanpa menggeser kerangka baca kodon berikutnya."
+      },
+      {
+        id: 49,
+        topic: "Selektivitas Antibiotik pada Translasi",
+        level: "HOTS (C5 - Mengevaluasi)",
+        question: "Antibiotik tetrasiklin bekerja dengan cara menghambat pengikatan aminoasil-tRNA pada situs A ribosom 70S bakteri, sehingga sintesis protein bakteri terhenti. Mengapa pemberian tetrasiklin pada dosis terapi aman bagi pasien manusia dan tidak menghentikan sintesis protein di dalam sitoplasma sel-sel tubuh pasien?",
+        options: [
+          "Sel eukariotik manusia memiliki ribosom sitoplasma tipe 80S yang struktur subunit rRNA dan proteinnya berbeda dari ribosom 70S prokariotik",
+          "Sel manusia tidak menggunakan molekul tRNA untuk membawa asam amino menuju ribosom selama proses translasi",
+          "Antibiotik tetrasiklin tidak mampu menembus membran plasma sel bakteri sehingga hanya bekerja di luar sel inang",
+          "Ribosom sel manusia tidak memiliki situs A, situs P, maupun situs E karena translasi berlangsung di dalam nukleus",
+          "Sel manusia menggunakan kode genetik kuadruplet (4 basa) yang tidak dikenali oleh senyawa penghambat kodon triplet"
+        ],
+        answer: 0,
+        explanation: "Toksisitas selektif antibiotik penghambat sintesis protein didasarkan pada perbedaan struktural antara ribosom 70S (subunit 30S + 50S) pada bakteri prokariotik dengan ribosom 80S (subunit 40S + 60S) pada sitoplasma eukariotik."
+      },
+      {
+        id: 50,
+        topic: "Poliribosom (Polisom)",
+        level: "HOTS (C4 - Menganalisis)",
+        question: "Pada sel kelenjar pankreas yang aktif memproduksi hormon insulin dalam jumlah besar, pengamatan mikroskop elektron menunjukkan struktur poliribosom (polisom), yaitu satu untai mRNA yang ditranslasikan oleh belasan ribosom secara bersamaan. Apabila diamati panjang rantai polipeptida yang menjulur dari setiap ribosom pada polisom tersebut, pola yang tampak adalah ....",
+        options: [
+          "Ribosom yang berada paling dekat dengan ujung 3' mRNA memiliki rantai polipeptida paling panjang, sedangkan yang dekat ujung 5' memiliki rantai paling pendek",
+          "Ribosom yang berada paling dekat dengan ujung 5' mRNA memiliki rantai polipeptida paling panjang, sedangkan yang dekat ujung 3' memiliki rantai paling pendek",
+          "Seluruh ribosom pada satu untai polisom memiliki panjang rantai polipeptida yang sama persis pada setiap saat",
+          "Ribosom di bagian tengah mRNA memiliki rantai polipeptida paling panjang karena translasi dimulai dari tengah menuju kedua ujung",
+          "Setiap ribosom pada polisom menghasilkan jenis protein dengan urutan asam amino yang berbeda satu sama lain"
+        ],
+        answer: 0,
+        explanation: "Ribosom memulai translasi di dekat ujung 5' mRNA dan bergerak menuju ujung 3'. Oleh karena itu, ribosom yang telah bergerak lebih jauh mendekati ujung 3' telah menerjemahkan lebih banyak kodon dan memiliki rantai polipeptida yang paling panjang."
+      }
+    ];
+
+    // ==================== STATE MANAGEMENT ====================
+    let state = {
+      currentView: 'student', // 'student' | 'teacher'
+      displayMode: 'single',  // 'single' | 'all'
+      currentQuestionIndex: 0,
+      answers: new Array(QUESTIONS.length).fill(null),
+      flags: new Array(QUESTIONS.length).fill(false),
+      submitted: false,
+      lastResult: null,
+      studentInfo: {
+        name: '',
+        className: '',
+        customClass: '',
+        absen: ''
+      },
+      secondsRemaining: 90 * 60,
+      teacherLoggedIn: false
+    };
+
+    const STORAGE_KEY_DRAFT = 'bio_xi_hots_draft_v1';
+    const STORAGE_KEY_SUBMISSIONS = 'bio_xi_hots_submissions_v1';
+    const STORAGE_KEY_WEBHOOK = 'bio_xi_hots_webhook_v1';
+
+    let timerInterval = null;
+
+    // ==================== INITIALIZATION ====================
+    window.addEventListener('DOMContentLoaded', () => {
+      loadDraft();
+      updateSubmissionBadge();
+      renderIdentityUI();
+      renderQuestionGrid();
+      renderCurrentQuestion();
+      updateProgressUI();
+      startTimer();
+    });
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (state.submitted) return;
+        if (state.secondsRemaining > 0) {
+          state.secondsRemaining--;
+          const mins = Math.floor(state.secondsRemaining / 60);
+          const secs = state.secondsRemaining % 60;
+          const el = document.getElementById('timerDisplay');
+          if (el) {
+            el.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            if (state.secondsRemaining < 300) {
+              el.classList.remove('text-emerald-700');
+              el.classList.add('text-red-600', 'animate-pulse');
+            }
+          }
+        }
+      }, 1000);
+    }
+
+    // ==================== IDENTITY BAR LOGIC ====================
+    function handleClassSelect(val) {
+      const customWrap = document.getElementById('customClassWrapper');
+      if (val === 'CUSTOM') {
+        customWrap.classList.remove('hidden');
+      } else {
+        customWrap.classList.add('hidden');
+      }
+      saveIdentity();
+    }
+
+    function saveIdentity() {
+      const nameVal = document.getElementById('inputStudentName').value;
+      const classSelect = document.getElementById('inputStudentClass').value;
+      const customClassVal = document.getElementById('inputCustomClass').value;
+      const absenVal = document.getElementById('inputStudentAbsen').value;
+
+      state.studentInfo = {
+        name: nameVal,
+        className: classSelect,
+        customClass: customClassVal,
+        absen: absenVal
+      };
+      renderIdentityUI();
+      saveDraft();
+    }
+
+    function getEffectiveClass() {
+      if (state.studentInfo.className === 'CUSTOM') {
+        return state.studentInfo.customClass.trim();
+      }
+      return state.studentInfo.className.trim();
+    }
+
+    function renderIdentityUI() {
+      document.getElementById('inputStudentName').value = state.studentInfo.name || '';
+      document.getElementById('inputStudentClass').value = state.studentInfo.className || '';
+      document.getElementById('inputCustomClass').value = state.studentInfo.customClass || '';
+      document.getElementById('inputStudentAbsen').value = state.studentInfo.absen || '';
+
+      if (state.studentInfo.className === 'CUSTOM') {
+        document.getElementById('customClassWrapper').classList.remove('hidden');
+      }
+
+      const validName = state.studentInfo.name.trim().length >= 2;
+      const validClass = getEffectiveClass().length >= 2;
+      const badge = document.getElementById('identityStatusBadge');
+
+      if (validName && validClass) {
+        badge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300';
+        badge.innerHTML = `✅ ${escapeHTML(state.studentInfo.name.trim())} (${escapeHTML(getEffectiveClass())})`;
+      } else {
+        badge.className = 'text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300';
+        badge.innerHTML = '⚠️ Lengkapi Nama &amp; Kelas';
+      }
+    }
+
+    // ==================== DRAFT PERSISTENCE ====================
+    function saveDraft() {
+      try {
+        localStorage.setItem(STORAGE_KEY_DRAFT, JSON.stringify({
+          answers: state.answers,
+          flags: state.flags,
+          studentInfo: state.studentInfo,
+          currentQuestionIndex: state.currentQuestionIndex
+        }));
+      } catch (e) { /* ignore storage quota errors */ }
+    }
+
+    function loadDraft() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_DRAFT);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed.answers) && parsed.answers.length === QUESTIONS.length) {
+          state.answers = parsed.answers;
+        }
+        if (Array.isArray(parsed.flags) && parsed.flags.length === QUESTIONS.length) {
+          state.flags = parsed.flags;
+        }
+        if (parsed.studentInfo) {
+          state.studentInfo = { ...state.studentInfo, ...parsed.studentInfo };
+        }
+        if (typeof parsed.currentQuestionIndex === 'number') {
+          state.currentQuestionIndex = parsed.currentQuestionIndex;
+        }
+      } catch (e) { /* ignore parse errors */ }
+    }
+
+    // ==================== QUIZ RENDERING ====================
+    function renderCurrentQuestion() {
+      const idx = state.currentQuestionIndex;
+      const q = QUESTIONS[idx];
+      const card = document.getElementById('singleQuestionCard');
+      const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+
+      const optionsHTML = q.options.map((optText, optIdx) => {
+        const isSelected = state.answers[idx] === optIdx;
+        const baseClasses = isSelected
+          ? 'border-emerald-600 bg-emerald-50/80 ring-2 ring-emerald-500/30'
+          : 'border-slate-200 hover:border-emerald-400 hover:bg-slate-50';
+        const badgeClasses = isSelected
+          ? 'bg-emerald-600 text-white border-emerald-600'
+          : 'bg-slate-100 text-slate-700 border-slate-300';
+
+        return `
+          <button
+            type="button"
+            onclick="selectOption(${idx}, ${optIdx})"
+            class="w-full text-left p-3.5 sm:p-4 rounded-xl border transition flex items-start gap-3.5 ${baseClasses}"
+          >
+            <span class="w-7 h-7 rounded-lg border font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 ${badgeClasses}">
+              ${optionLetters[optIdx]}
+            </span>
+            <span class="text-sm sm:text-[15px] leading-relaxed text-slate-800">${optText}</span>
+          </button>
+        `;
+      }).join('');
+
+      card.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-4 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-lg bg-emerald-700 text-white font-extrabold text-xs sm:text-sm">
+              Soal No. ${q.id} / ${QUESTIONS.length}
+            </span>
+            <span class="px-2.5 py-1 rounded-lg bg-teal-50 text-teal-800 border border-teal-200 font-semibold text-xs">
+              ${q.topic}
+            </span>
+          </div>
+          <span class="px-2.5 py-1 rounded-lg bg-purple-50 text-purple-800 border border-purple-200 font-bold text-xs">
+            ${q.level}
+          </span>
+        </div>
+
+        <div class="text-sm sm:text-base text-slate-800 leading-relaxed font-medium mb-6">
+          ${q.question}
+        </div>
+
+        <div class="space-y-2.5">
+          ${optionsHTML}
+        </div>
+      `;
+
+      // Update Nav Buttons
+      document.getElementById('btnPrev').disabled = idx === 0;
+      const btnNext = document.getElementById('btnNext');
+      if (idx === QUESTIONS.length - 1) {
+        btnNext.textContent = 'Selesai & Kumpulkan ✓';
+        btnNext.onclick = confirmSubmitQuiz;
+        btnNext.className = 'px-4 py-2.5 rounded-xl text-sm font-bold bg-emerald-600 text-white hover:bg-emerald-700 transition';
+      } else {
+        btnNext.textContent = 'Selanjutnya →';
+        btnNext.onclick = nextQuestion;
+        btnNext.className = 'px-4 py-2.5 rounded-xl text-sm font-semibold bg-emerald-700 text-white hover:bg-emerald-800 transition';
+      }
+
+      const btnFlag = document.getElementById('btnFlag');
+      if (state.flags[idx]) {
+        btnFlag.className = 'px-4 py-2.5 rounded-xl text-sm font-bold border border-amber-500 bg-amber-400 text-slate-900 transition';
+        btnFlag.innerHTML = '🚩 Ditandai Ragu-ragu';
+      } else {
+        btnFlag.className = 'px-4 py-2.5 rounded-xl text-sm font-semibold border border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100 transition';
+        btnFlag.innerHTML = '🚩 Tandai Ragu-ragu';
+      }
+    }
+
+    function renderAllQuestionsMode() {
+      const container = document.getElementById('allQuestionsContainer');
+      const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+
+      container.innerHTML = QUESTIONS.map((q, idx) => {
+        const optionsHTML = q.options.map((optText, optIdx) => {
+          const isSelected = state.answers[idx] === optIdx;
+          const baseClasses = isSelected
+            ? 'border-emerald-600 bg-emerald-50 ring-1 ring-emerald-500'
+            : 'border-slate-200 hover:border-emerald-400 hover:bg-slate-50';
+          const badgeClasses = isSelected
+            ? 'bg-emerald-600 text-white border-emerald-600'
+            : 'bg-slate-100 text-slate-700 border-slate-300';
+
+          return `
+            <button
+              type="button"
+              onclick="selectOption(${idx}, ${optIdx})"
+              class="w-full text-left p-3 rounded-xl border transition flex items-start gap-3 ${baseClasses}"
+            >
+              <span class="w-6 h-6 rounded-md border font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 ${badgeClasses}">
+                ${optionLetters[optIdx]}
+              </span>
+              <span class="text-sm leading-relaxed text-slate-800">${optText}</span>
+            </button>
+          `;
+        }).join('');
+
+        return `
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6">
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-lg bg-emerald-700 text-white font-bold text-xs">No. ${q.id}</span>
+                <span class="text-xs font-semibold text-teal-800 bg-teal-50 px-2 py-0.5 rounded border border-teal-200">${q.topic}</span>
+              </div>
+              <span class="text-xs font-bold text-purple-800 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">${q.level}</span>
+            </div>
+            <div class="text-sm sm:text-base text-slate-800 font-medium leading-relaxed mb-4">${q.question}</div>
+            <div class="space-y-2">${optionsHTML}</div>
+          </div>
+        `;
+      }).join('') + `
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <span class="text-sm font-semibold text-slate-700">Pastikan Nama &amp; Kelas sudah terisi di bagian atas sebelum mengirim.</span>
+          <button onclick="confirmSubmitQuiz()" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow transition">
+            ✅ Kumpulkan Semua Jawaban
+          </button>
+        </div>
+      `;
+    }
+
+    function renderQuestionGrid() {
+      const grid = document.getElementById('questionGrid');
+      grid.innerHTML = QUESTIONS.map((q, idx) => {
+        const isCurrent = idx === state.currentQuestionIndex;
+        const isAnswered = state.answers[idx] !== null;
+        const isFlagged = state.flags[idx];
+
+        let styleClass = 'bg-slate-100 text-slate-700 border-slate-300 hover:bg-slate-200';
+        if (isFlagged) {
+          styleClass = 'bg-amber-400 text-slate-900 border-amber-500 font-bold';
+        } else if (isAnswered) {
+          styleClass = 'bg-emerald-600 text-white border-emerald-700 font-bold';
+        }
+
+        if (isCurrent) {
+          styleClass += ' ring-2 ring-blue-500 ring-offset-1';
+        }
+
+        return `
+          <button
+            type="button"
+            onclick="jumpToQuestion(${idx})"
+            class="h-8 rounded-lg border text-xs flex items-center justify-center transition ${styleClass}"
+            title="Soal ${q.id}"
+          >
+            ${q.id}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectOption(qIdx, optIdx) {
+      if (state.submitted) return;
+      state.answers[qIdx] = optIdx;
+      saveDraft();
+      updateProgressUI();
+      if (state.displayMode === 'single') {
+        renderCurrentQuestion();
+        renderQuestionGrid();
+      } else {
+        renderAllQuestionsMode();
+      }
+    }
+
+    function toggleFlagCurrent() {
+      const idx = state.currentQuestionIndex;
+      state.flags[idx] = !state.flags[idx];
+      saveDraft();
+      renderCurrentQuestion();
+      renderQuestionGrid();
+    }
+
+    function jumpToQuestion(idx) {
+      state.currentQuestionIndex = idx;
+      saveDraft();
+      renderCurrentQuestion();
+      renderQuestionGrid();
+    }
+
+    function prevQuestion() {
+      if (state.currentQuestionIndex > 0) {
+        jumpToQuestion(state.currentQuestionIndex - 1);
+      }
+    }
+
+    function nextQuestion() {
+      if (state.currentQuestionIndex < QUESTIONS.length - 1) {
+        jumpToQuestion(state.currentQuestionIndex + 1);
+      }
+    }
+
+    function toggleDisplayMode() {
+      const btn = document.getElementById('btnToggleDisplayMode');
+      const activeContainer = document.getElementById('activeQuizContainer');
+      const allContainer = document.getElementById('allQuestionsContainer');
+
+      if (state.displayMode === 'single') {
+        state.displayMode = 'all';
+        btn.innerHTML = '🎯 Mode Fokus (Satu Soal)';
+        activeContainer.classList.add('hidden');
+        allContainer.classList.remove('hidden');
+        renderAllQuestionsMode();
+      } else {
+        state.displayMode = 'single';
+        btn.innerHTML = '📋 Tampilkan Semua 50 Soal';
+        allContainer.classList.add('hidden');
+        activeContainer.classList.remove('hidden');
+        renderCurrentQuestion();
+        renderQuestionGrid();
+      }
+    }
+
+    function updateProgressUI() {
+      const answeredCount = state.answers.filter(a => a !== null).length;
+      const pct = Math.round((answeredCount / QUESTIONS.length) * 100);
+      document.getElementById('answeredCounter').textContent = `${answeredCount} / ${QUESTIONS.length}`;
+      document.getElementById('progressBarFill').style.width = `${pct}%`;
+    }
+
+    // ==================== SUBMIT & SCORE COLLECTION ====================
+    function confirmSubmitQuiz() {
+      const name = state.studentInfo.name.trim();
+      const className = getEffectiveClass();
+
+      if (!name || !className) {
+        alert('⚠️ Mohon lengkapi NAMA LENGKAP dan KELAS Anda pada bar identitas di bagian atas sebelum mengumpulkan jawaban!');
+        document.getElementById('inputStudentName').focus();
+        return;
+      }
+
+      const unanswered = state.answers.filter(a => a === null).length;
+      let msg = `Kumpulkan jawaban atas nama:\nNama: ${name}\nKelas: ${className}\n\n`;
+      if (unanswered > 0) {
+        msg += `Perhatian: Masih ada ${unanswered} soal yang belum dijawab.\nApakah Anda yakin ingin mengumpulkan sekarang?`;
+      } else {
+        msg += `Seluruh 50 soal telah terjawab. Kumpulkan nilai sekarang ke Akun Pembuat Soal?`;
+      }
+
+      if (!confirm(msg)) return;
+      submitQuiz();
+    }
+
+    function submitQuiz() {
+      let correctCount = 0;
+      const detailList = QUESTIONS.map((q, idx) => {
+        const chosen = state.answers[idx];
+        const isCorrect = chosen === q.answer;
+        if (isCorrect) correctCount++;
+        return {
+          qId: q.id,
+          chosen: chosen,
+          correct: q.answer,
+          isCorrect: isCorrect
+        };
+      });
+
+      const score = Number(((correctCount / QUESTIONS.length) * 100).toFixed(1));
+      const now = new Date();
+      const timestamp = now.toLocaleString('id-ID', {
+        day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+
+      const submissionRecord = {
+        id: 'SUB-' + Date.now(),
+        nama: state.studentInfo.name.trim(),
+        kelas: getEffectiveClass(),
+        absen: state.studentInfo.absen.trim() || '-',
+        benar: correctCount,
+        salah: QUESTIONS.length - correctCount,
+        skor: score,
+        waktu: timestamp,
+        details: detailList
+      };
+
+      // Save into Creator's Account Storage
+      const existing = getSubmissions();
+      existing.unshift(submissionRecord);
+      localStorage.setItem(STORAGE_KEY_SUBMISSIONS, JSON.stringify(existing));
+
+      // Optional Cloud Sync via Webhook if configured by teacher
+      sendToWebhookIfConfigured(submissionRecord);
+
+      // Clear active draft answers so next student starts clean if shared device
+      localStorage.removeItem(STORAGE_KEY_DRAFT);
+
+      state.submitted = true;
+      state.lastResult = submissionRecord;
+      updateSubmissionBadge();
+      renderResultScreen(submissionRecord);
+    }
+
+    function sendToWebhookIfConfigured(record) {
+      const url = localStorage.getItem(STORAGE_KEY_WEBHOOK);
+      if (!url) return;
+      try {
+        fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(record)
+        });
+      } catch (e) { /* silent fallback */ }
+    }
+
+    function renderResultScreen(res) {
+      document.getElementById('quizControlsBar').classList.add('hidden');
+      document.getElementById('activeQuizContainer').classList.add('hidden');
+      document.getElementById('allQuestionsContainer').classList.add('hidden');
+
+      const resultDiv = document.getElementById('resultContainer');
+      resultDiv.classList.remove('hidden');
+
+      let predicate = 'Perlu Pengayaan';
+      let badgeColor = 'bg-amber-100 text-amber-800 border-amber-300';
+      if (res.skor >= 86) {
+        predicate = 'Sangat Kompeten (Mahir HOTS)';
+        badgeColor = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+      } else if (res.skor >= 75) {
+        predicate = 'Kompeten (Tuntas KKM)';
+        badgeColor = 'bg-blue-100 text-blue-800 border-blue-300';
+      }
+
+      const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+      const reviewHTML = QUESTIONS.map((q, idx) => {
+        const chosen = state.answers[idx];
+        const isCorrect = chosen === q.answer;
+        const statusBadge = isCorrect
+          ? '<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">✓ Benar</span>'
+          : '<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800">✕ Kurang Tepat</span>';
+
+        const chosenText = chosen !== null
+          ? `${optionLetters[chosen]}. ${q.options[chosen]}`
+          : '<em class="text-slate-400">Tidak dijawab</em>';
+
+        return `
+          <div class="bg-white rounded-2xl border ${isCorrect ? 'border-emerald-200' : 'border-red-200'} p-5 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <div class="flex items-center gap-2">
+                <span class="font-extrabold text-sm text-slate-800">Soal ${q.id}</span>
+                <span class="text-xs text-slate-500">• ${q.topic}</span>
+              </div>
+              ${statusBadge}
+            </div>
+            <div class="text-sm text-slate-800 font-medium mb-3 leading-relaxed">${q.question}</div>
+            <div class="space-y-1.5 text-xs mb-3">
+              <div class="p-2.5 rounded-xl ${isCorrect ? 'bg-emerald-50 text-emerald-900 border border-emerald-200' : 'bg-red-50 text-red-900 border border-red-200'}">
+                <strong>Jawaban Anda:</strong> ${chosenText}
+              </div>
+              ${!isCorrect ? `
+                <div class="p-2.5 rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-200">
+                  <strong>Kunci Jawaban:</strong> ${optionLetters[q.answer]}. ${q.options[q.answer]}
+                </div>
+              ` : ''}
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 leading-relaxed">
+              <strong class="text-slate-900">💡 Pembahasan Guru:</strong> ${q.explanation}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      resultDiv.innerHTML = `
+        <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 sm:p-8 text-center">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold mb-4">
+            <span>✅ Nilai Berhasil Dikumpulkan ke Akun Pembuat Soal</span>
+          </div>
+          <h2 class="text-2xl font-extrabold text-slate-800">${escapeHTML(res.nama)}</h2>
+          <p class="text-sm text-slate-500 mt-0.5">Kelas: <strong>${escapeHTML(res.kelas)}</strong> • No. Absen: <strong>${escapeHTML(res.absen)}</strong> • Waktu: ${res.waktu}</p>
+
+          <div class="max-w-xl mx-auto grid grid-cols-3 gap-3 my-6">
+            <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
+              <span class="text-xs font-semibold text-emerald-700 block">Nilai Akhir</span>
+              <span class="text-3xl font-extrabold text-emerald-800 mt-1 block">${res.skor}</span>
+            </div>
+            <div class="p-4 rounded-2xl bg-blue-50 border border-blue-200">
+              <span class="text-xs font-semibold text-blue-700 block">Jawaban Benar</span>
+              <span class="text-3xl font-extrabold text-blue-800 mt-1 block">${res.benar}<span class="text-base font-bold">/50</span></span>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+              <span class="text-xs font-semibold text-slate-600 block">Jawaban Salah</span>
+              <span class="text-3xl font-extrabold text-slate-700 mt-1 block">${res.salah}</span>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <span class="px-4 py-1.5 rounded-full text-xs font-bold border ${badgeColor}">
+              Predikat Capaian: ${predicate}
+            </span>
+          </div>
+
+          <div class="flex flex-wrap justify-center gap-3">
+            <button onclick="resetForNewStudent()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs sm:text-sm font-bold transition">
+              🔄 Peserta Berikutnya (Mulai Baru)
+            </button>
+            <button onclick="switchView('teacher')" class="px-5 py-2.5 rounded-xl border border-emerald-600 text-emerald-800 hover:bg-emerald-50 text-xs sm:text-sm font-bold transition">
+              👨‍🏫 Cek Rekap di Akun Pembuat Soal
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <h3 class="text-lg font-extrabold text-slate-800">📖 Kunci Jawaban &amp; Pembahasan Lengkap (50 Soal)</h3>
+          ${reviewHTML}
+        </div>
+      `;
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetForNewStudent() {
+      state.answers = new Array(QUESTIONS.length).fill(null);
+      state.flags = new Array(QUESTIONS.length).fill(false);
+      state.currentQuestionIndex = 0;
+      state.submitted = false;
+      state.lastResult = null;
+      state.secondsRemaining = 90 * 60;
+      state.studentInfo = { name: '', className: '', customClass: '', absen: '' };
+
+      localStorage.removeItem(STORAGE_KEY_DRAFT);
+
+      document.getElementById('resultContainer').classList.add('hidden');
+      document.getElementById('quizControlsBar').classList.remove('hidden');
+
+      if (state.displayMode === 'single') {
+        document.getElementById('activeQuizContainer').classList.remove('hidden');
+      } else {
+        document.getElementById('allQuestionsContainer').classList.remove('hidden');
+      }
+
+      renderIdentityUI();
+      updateProgressUI();
+      renderQuestionGrid();
+      renderCurrentQuestion();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==================== VIEW SWITCHING & TEACHER ACCOUNT ====================
+    function switchView(viewName) {
+      state.currentView = viewName;
+      const viewStudent = document.getElementById('viewStudent');
+      const viewTeacher = document.getElementById('viewTeacher');
+      const identityBar = document.getElementById('studentIdentityBar');
+      const btnStudent = document.getElementById('btnModeStudent');
+      const btnTeacher = document.getElementById('btnModeTeacher');
+
+      if (viewName === 'student') {
+        viewStudent.classList.remove('hidden');
+        viewTeacher.classList.add('hidden');
+        identityBar.classList.remove('hidden');
+        btnStudent.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-white text-emerald-900 shadow transition';
+        btnTeacher.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-emerald-100 hover:bg-white/10 transition flex items-center gap-1.5';
+      } else {
+        viewStudent.classList.add('hidden');
+        viewTeacher.classList.remove('hidden');
+        identityBar.classList.add('hidden');
+        btnTeacher.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-white text-emerald-900 shadow transition flex items-center gap-1.5';
+        btnStudent.className = 'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-emerald-100 hover:bg-white/10 transition';
+
+        if (state.teacherLoggedIn) {
+          document.getElementById('teacherLoginCard').classList.add('hidden');
+          document.getElementById('teacherDashboard').classList.remove('hidden');
+          renderTeacherDashboard();
+        } else {
+          document.getElementById('teacherLoginCard').classList.remove('hidden');
+          document.getElementById('teacherDashboard').classList.add('hidden');
+        }
+      }
+    }
+
+    function handleTeacherLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById('teacherUser').value.trim();
+      const pass = document.getElementById('teacherPass').value.trim();
+      const err = document.getElementById('teacherLoginError');
+
+      if (user === 'guru' && pass === 'biologi11') {
+        state.teacherLoggedIn = true;
+        err.classList.add('hidden');
+        document.getElementById('teacherLoginCard').classList.add('hidden');
+        document.getElementById('teacherDashboard').classList.remove('hidden');
+        renderTeacherDashboard();
+      } else {
+        err.classList.remove('hidden');
+      }
+    }
+
+    function logoutTeacher() {
+      state.teacherLoggedIn = false;
+      document.getElementById('teacherPass').value = '';
+      document.getElementById('teacherDashboard').classList.add('hidden');
+      document.getElementById('teacherLoginCard').classList.remove('hidden');
+    }
+
+    function getSubmissions() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_SUBMISSIONS);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function updateSubmissionBadge() {
+      const subs = getSubmissions();
+      document.getElementById('badgeSubmissionCount').textContent = subs.length;
+    }
+
+    function renderTeacherDashboard() {
+      const subs = getSubmissions();
+      updateSubmissionBadge();
+
+      // Update stats
+      document.getElementById('statTotalStudents').textContent = `${subs.length} Siswa`;
+      if (subs.length > 0) {
+        const scores = subs.map(s => Number(s.skor));
+        const avg = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
+        const max = Math.max(...scores);
+        const min = Math.min(...scores);
+        document.getElementById('statAvgScore').textContent = avg;
+        document.getElementById('statMaxScore').textContent = max;
+        document.getElementById('statMinScore').textContent = min;
+      } else {
+        document.getElementById('statAvgScore').textContent = '0.0';
+        document.getElementById('statMaxScore').textContent = '0';
+        document.getElementById('statMinScore').textContent = '0';
+      }
+
+      // Populate Class Filter dynamically
+      const filterSelect = document.getElementById('filterClass');
+      const currentSelected = filterSelect.value;
+      const uniqueClasses = [...new Set(subs.map(s => s.kelas))].sort();
+      filterSelect.innerHTML = `<option value="ALL">Semua Kelas (${subs.length})</option>` +
+        uniqueClasses.map(c => `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('');
+      if (uniqueClasses.includes(currentSelected)) {
+        filterSelect.value = currentSelected;
+      }
+
+      renderTeacherTable();
+    }
+
+    function renderTeacherTable() {
+      const subs = getSubmissions();
+      const query = document.getElementById('filterSearchName').value.trim().toLowerCase();
+      const classFilter = document.getElementById('filterClass').value;
+      const tbody = document.getElementById('teacherTableBody');
+
+      const filtered = subs.filter(s => {
+        const matchName = s.nama.toLowerCase().includes(query);
+        const matchClass = classFilter === 'ALL' || s.kelas === classFilter;
+        return matchName && matchClass;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-10 px-4 text-center text-slate-400 text-sm">
+              Belum ada nilai siswa yang masuk. Siswa yang mengerjakan pada tab <strong>Ruang Ujian Siswa</strong> akan otomatis tercatat di sini.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map((s, index) => {
+        const scoreBadge = s.skor >= 75
+          ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+          : 'bg-amber-100 text-amber-800 border-amber-300';
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3 px-4 font-semibold text-slate-500">${index + 1}</td>
+            <td class="py-3 px-4 font-bold text-slate-800">${escapeHTML(s.nama)}</td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-xs font-semibold">${escapeHTML(s.kelas)}</span></td>
+            <td class="py-3 px-4 text-slate-600">${escapeHTML(s.absen)}</td>
+            <td class="py-3 px-4 text-center font-semibold text-slate-700">${s.benar} / 50</td>
+            <td class="py-3 px-4 text-center">
+              <span class="px-2.5 py-1 rounded-full text-xs font-extrabold border ${scoreBadge}">${s.skor}</span>
+            </td>
+            <td class="py-3 px-4 text-xs text-slate-500">${escapeHTML(s.waktu)}</td>
+            <td class="py-3 px-4 text-right space-x-1">
+              <button onclick="viewSubmissionDetail('${s.id}')" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200">
+                Detail
+              </button>
+              <button onclick="deleteSubmission('${s.id}')" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-red-50 text-red-700 hover:bg-red-100 border border-red-200">
+                Hapus
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function viewSubmissionDetail(subId) {
+      const subs = getSubmissions();
+      const record = subs.find(s => s.id === subId);
+      if (!record) return;
+
+      document.getElementById('detailModalTitle').textContent = `${record.nama} (${record.kelas})`;
+      document.getElementById('detailModalSubtitle').textContent = `Nilai Akhir: ${record.skor} • Benar: ${record.benar}/50 • Waktu: ${record.waktu}`;
+
+      const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+      const body = document.getElementById('detailModalBody');
+
+      if (!record.details || record.details.length === 0) {
+        body.innerHTML = '<p class="text-slate-500">Data rincian per nomor tidak tersedia untuk data simulasi ini.</p>';
+      } else {
+        body.innerHTML = `
+          <div class="grid grid-cols-5 sm:grid-cols-10 gap-2">
+            ${record.details.map(d => {
+              const chosenStr = d.chosen !== null ? optionLetters[d.chosen] : '-';
+              const correctStr = optionLetters[d.correct];
+              return `
+                <div class="p-2 rounded-xl border text-center ${d.isCorrect ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-red-50 border-red-300 text-red-900'}">
+                  <div class="font-bold text-[11px]">No.${d.qId}</div>
+                  <div class="font-extrabold text-xs mt-0.5">${chosenStr} ${d.isCorrect ? '✓' : `(${correctStr})`}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+
+      document.getElementById('studentDetailModal').classList.remove('hidden');
+    }
+
+    function closeDetailModal() {
+      document.getElementById('studentDetailModal').classList.add('hidden');
+    }
+
+    function deleteSubmission(subId) {
+      if (!confirm('Hapus data nilai siswa ini dari rekap?')) return;
+      const updated = getSubmissions().filter(s => s.id !== subId);
+      localStorage.setItem(STORAGE_KEY_SUBMISSIONS, JSON.stringify(updated));
+      renderTeacherDashboard();
+    }
+
+    function clearAllSubmissions() {
+      if (!confirm('Apakah Anda yakin ingin menghapus SELURUH rekap nilai siswa di akun ini?')) return;
+      localStorage.removeItem(STORAGE_KEY_SUBMISSIONS);
+      renderTeacherDashboard();
+    }
+
+    function seedDemoData() {
+      const sample = [
+        {
+          id: 'SUB-DEMO-1',
+          nama: 'Nadia Putri Rahmawati',
+          kelas: 'XI IPA 1',
+          absen: '18',
+          benar: 44,
+          salah: 6,
+          skor: 88.0,
+          waktu: '19 Nov 2026, 09.15',
+          details: []
+        },
+        {
+          id: 'SUB-DEMO-2',
+          nama: 'Dimas Pratama Wijaya',
+          kelas: 'XI IPA 2',
+          absen: '09',
+          benar: 39,
+          salah: 11,
+          skor: 78.0,
+          waktu: '19 Nov 2026, 09.28',
+          details: []
+        }
+      ];
+      const existing = getSubmissions();
+      localStorage.setItem(STORAGE_KEY_SUBMISSIONS, JSON.stringify([...sample, ...existing]));
+      renderTeacherDashboard();
+    }
+
+    function exportResultsCSV() {
+      const subs = getSubmissions();
+      if (subs.length === 0) {
+        alert('Belum ada data nilai siswa untuk diunduh.');
+        return;
+      }
+
+      const headers = ['No', 'Nama Lengkap Siswa', 'Kelas', 'No Absen', 'Jawaban Benar', 'Jawaban Salah', 'Nilai Akhir', 'Waktu Pengumpulan'];
+      const rows = subs.map((s, idx) => [
+        idx + 1,
+        `"${s.nama.replace(/"/g, '""')}"`,
+        `"${s.kelas.replace(/"/g, '""')}"`,
+        `"${s.absen}"`,
+        s.benar,
+        s.salah,
+        s.skor,
+        `"${s.waktu}"`
+      ]);
+
+      const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Rekap_Nilai_Substansi_Genetik_Kelas_XI.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function toggleTeacherAnswerKey() {
+      const box = document.getElementById('teacherAnswerKeyContainer');
+      const btn = document.getElementById('btnToggleKey');
+      const optionLetters = ['A', 'B', 'C', 'D', 'E'];
+
+      if (box.classList.contains('hidden')) {
+        box.classList.remove('hidden');
+        btn.textContent = 'Tutup Kunci Jawaban';
+        box.innerHTML = QUESTIONS.map(q => `
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-emerald-800">Soal ${q.id} • ${q.topic} (${q.level})</span>
+              <span class="px-2 py-0.5 rounded bg-emerald-600 text-white font-bold">Kunci: ${optionLetters[q.answer]}</span>
+            </div>
+            <p class="text-slate-800 font-medium leading-relaxed">${q.question}</p>
+            <p class="text-emerald-900 font-semibold">Jawaban Benar: ${optionLetters[q.answer]}. ${q.options[q.answer]}</p>
+            <p class="text-slate-600"><strong>Pembahasan:</strong> ${q.explanation}</p>
+          </div>
+        `).join('');
+      } else {
+        box.classList.add('hidden');
+        btn.textContent = 'Buka Kunci Jawaban & Pembahasan';
+      }
+    }
+
+    // ==================== WEBHOOK MODAL ====================
+    function openWebhookModal() {
+      document.getElementById('inputWebhookUrl').value = localStorage.getItem(STORAGE_KEY_WEBHOOK) || '';
+      document.getElementById('webhookModal').classList.remove('hidden');
+    }
+
+    function closeWebhookModal() {
+      document.getElementById('webhookModal').classList.add('hidden');
+    }
+
+    function saveWebhookUrl() {
+      const url = document.getElementById('inputWebhookUrl').value.trim();
+      if (url) {
+        localStorage.setItem(STORAGE_KEY_WEBHOOK, url);
+        alert('✅ URL Sinkronisasi Google Sheets berhasil disimpan!');
+      } else {
+        localStorage.removeItem(STORAGE_KEY_WEBHOOK);
+        alert('URL dihapus. Nilai akan disimpan di penyimpanan lokal Akun Pembuat Soal.');
+      }
+      closeWebhookModal();
+    }
+
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
